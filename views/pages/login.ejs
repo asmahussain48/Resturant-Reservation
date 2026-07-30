@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Royal Taste</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-[#FAF7F2]">
+
+    <div class="flex items-center justify-center px-6 py-12">
+
+        <div class="w-full max-w-md">
+
+            <!-- MOBILE LOGO -->
+            <div class="lg:hidden text-center mb-10">
+                <a href="/" class="text-3xl font-serif font-bold text-[#8B5E34]">
+                    🍂 Royal Taste
+                </a>
+            </div>
+
+
+            <div class="mb-10">
+
+                <p class="text-[#8B5E34] uppercase tracking-[4px] text-sm mb-3">
+                    Member Access
+                </p>
+
+                <h2 class="text-5xl font-serif font-bold text-[#1C1917]">
+                    Sign in
+                </h2>
+
+                <p class="text-gray-500 mt-3">
+                    Continue to your Royal Taste experience.
+                </p>
+
+            </div>
+
+
+            <!-- ERROR MESSAGE -->
+            <div id="errorMessage" class="hidden mb-5 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl">
+            </div>
+
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm">
+
+                <!-- EMAIL -->
+                <div class="mb-5">
+
+                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Email Address
+                    </label>
+
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required
+                        class="w-full bg-white border border-stone-200 px-4 py-4 rounded-2xl outline-none transition focus:border-[#8B5E34] focus:ring-2 focus:ring-[#8B5E34]/10">
+
+                </div>
+
+
+                <!-- PASSWORD -->
+                <div class="mb-7">
+
+                    <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Password
+                    </label>
+
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required
+                        class="w-full bg-white border border-stone-200 px-4 py-4 rounded-2xl outline-none transition focus:border-[#8B5E34] focus:ring-2 focus:ring-[#8B5E34]/10">
+
+                </div>
+
+
+                <!-- LOGIN BUTTON -->
+                <button id="loginButton" type="submit"
+                    class="w-full bg-[#8B5E34] text-white py-4 rounded-2xl font-semibold hover:bg-[#6F451F] transition duration-300 shadow-lg shadow-[#8B5E34]/20">
+                    Sign In
+                </button>
+
+            </form>
+
+
+            <!-- REGISTER -->
+            <div class="text-center mt-8 pt-8 border-t border-stone-200">
+
+                <p class="text-gray-500">
+                    New to Royal Taste?
+
+                    <a href="/register" class="text-[#8B5E34] font-semibold hover:underline">
+                        Create an account
+                    </a>
+                </p>
+
+            </div>
+
+
+            <!-- HOME -->
+            <div class="text-center mt-5">
+
+                <a href="/" class="text-sm text-gray-400 hover:text-[#8B5E34]">
+                    ← Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LOGIN JAVASCRIPT -->
+    <script>
+
+        const loginForm = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+        const errorMessage = document.getElementById("errorMessage");
+
+
+        loginForm.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+
+
+            errorMessage.classList.add("hidden");
+
+
+            loginButton.disabled = true;
+            loginButton.textContent = "Signing in...";
+
+
+            try {
+
+                const response = await fetch("/login", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+
+                });
+
+
+                const data = await response.json();
+
+
+                if (!response.ok) {
+
+                    errorMessage.textContent = data.message || "Login failed";
+
+                    errorMessage.classList.remove("hidden");
+
+                    loginButton.disabled = false;
+                    loginButton.textContent = "Sign In";
+
+                    return;
+                }
+
+
+                // Session cookie is automatically saved
+                window.location.href = "/menu";
+
+
+            } catch (error) {
+
+                console.log(error);
+
+
+                errorMessage.textContent = "Unable to connect to the server.";
+
+                errorMessage.classList.remove("hidden");
+
+
+                loginButton.disabled = false;
+                loginButton.textContent = "Sign In";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

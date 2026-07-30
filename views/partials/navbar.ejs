@@ -1,0 +1,62 @@
+<nav class="bg-[#FAF7F2] px-8 py-6 flex justify-between items-center">
+    <div>
+        <h1 class="text-3xl font-serif font-bold text-[#8B5E34]">🍂 Royal Taste</h1>
+        <p class="text-sm text-gray-500 tracking-widest">FINE DINING EXPERIENCE</p>
+    </div>
+
+    <div class="flex items-center gap-8 text-gray-700">
+        <a href="/" class="hover:text-[#8B5E34] transition">Home</a>
+
+        <a href="/menu" class="hover:text-[#8B5E34] transition">Menu</a>
+
+        <a href="/my-reservations" class="hover:text-[#8B5E34] transition">
+            My Table
+        </a>
+
+        <% if(user) { %>
+
+            <div class="relative group">
+                <button class="bg-[#8B5E34] text-white px-6 py-3 rounded-full font-medium flex items-center gap-2 hover:bg-[#6F451F] transition duration-300">
+                    <span>👤</span>
+                    <span><%= user.name %></span>
+                    <span class="text-xs">▼</span>
+                </button>
+
+                <div class="hidden group-hover:block absolute right-0 mt-3 bg-white shadow-xl rounded-xl p-4 w-40 z-50">
+                    <a href="/my-reservations" class="block py-2 hover:text-[#8B5E34]">
+                        My Reservations
+                    </a>
+
+                    <button id="logoutButton" class="block py-2 text-red-600">
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+        <% } else { %>
+
+            <a href="/login" class="bg-[#8B5E34] text-white px-6 py-3 rounded-full hover:bg-[#6F451F] transition">
+                Login
+            </a>
+
+        <% } %>
+    </div>
+</nav>
+
+<script>
+    const logoutButton = document.getElementById("logoutButton");
+
+    if (logoutButton) {
+        logoutButton.onclick = async () => {
+            const response = await fetch("/logout", {
+                method: "POST"
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                window.location.href = "/login";
+            }
+        };
+    }
+</script>

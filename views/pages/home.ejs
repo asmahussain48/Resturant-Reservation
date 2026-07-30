@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Royal Taste</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#FAF7F2]">
+    <%- include("../partials/navbar") %>
+
+        <section class="min-h-screen flex items-center px-10">
+            <div class="grid md:grid-cols-2 gap-10 items-center w-full">
+                <!-- Left -->
+
+                <div>
+                    <p class="uppercase tracking-[5px] text-[#8B5E34] mb-5">Welcome To</p>
+
+                    <h1 class="text-7xl font-serif font-bold text-[#1C1917] leading-tight">
+                        A Taste That Creates Memories
+                    </h1>
+
+                    <p class="mt-8 text-xl text-gray-600 leading-relaxed">
+                        Experience carefully crafted dishes, beautiful atmosphere and
+                        unforgettable dining moments.
+                    </p>
+
+                    <div class="mt-10 flex gap-5">
+                        <a href="/menu"
+                            class="bg-[#8B5E34] text-white px-10 py-4 rounded-full hover:scale-105 transition">
+                            🍽 Explore Menu
+                        </a>
+
+                        <a href="/reservation"
+                            class="border border-[#8B5E34] text-[#8B5E34] px-10 py-4 rounded-full hover:bg-[#8B5E34] hover:text-white transition">
+                            Reserve Table
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right -->
+
+                <div class="relative">
+                    <div class="bg-[#EADBC8] rounded-[50px] h-[500px] flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="text-[150px]">🍽️</div>
+
+                            <h2 class="text-3xl font-serif text-[#8B5E34]">Premium Dining</h2>
+
+                            <p class="text-gray-600 mt-3">Fresh • Elegant • Delicious</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-20 px-10 bg-white">
+            <h2 class="text-5xl text-center font-serif font-bold">Our Experience</h2>
+
+            <div class="grid md:grid-cols-3 gap-10 mt-16">
+                <div class="p-10 rounded-3xl bg-[#FAF7F2] text-center">
+                    <div class="text-6xl">🍕</div>
+
+                    <h3 class="text-2xl font-bold mt-5">Authentic Cuisine</h3>
+
+                    <p class="text-gray-600 mt-3">
+                        Delicious meals prepared with passion.
+                    </p>
+                </div>
+
+                <div class="p-10 rounded-3xl bg-[#FAF7F2] text-center">
+                    <div class="text-6xl">🪑</div>
+
+                    <h3 class="text-2xl font-bold mt-5">Perfect Ambience</h3>
+
+                    <p class="text-gray-600 mt-3">
+                        A comfortable place for every occasion.
+                    </p>
+                </div>
+
+                <div class="p-10 rounded-3xl bg-[#FAF7F2] text-center">
+                    <div class="text-6xl">⭐</div>
+
+                    <h3 class="text-2xl font-bold mt-5">Premium Service</h3>
+
+                    <p class="text-gray-600 mt-3">Making every visit memorable.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-[#1C1917] text-white py-8 text-center">
+            🍂 Royal Taste Restaurant
+        </footer>
+</body>
+
+</html>

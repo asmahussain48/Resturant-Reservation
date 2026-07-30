@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Reservations | Royal Taste</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-[#F8F4EE] text-[#211A15] min-h-screen">
+    <section class="px-6 py-12">
+      <div class="max-w-5xl mx-auto">
+        <a href="/menu" class="text-gray-500 hover:text-[#8B5E34]">
+          ← Back to Menu
+        </a>
+
+        <div class="text-center mt-10 mb-12">
+          <p class="uppercase tracking-[5px] text-xs text-[#8B5E34]">
+            Royal Taste
+          </p>
+
+          <h1 class="font-serif text-5xl font-bold mt-4">My Reservations</h1>
+
+          <p class="text-gray-500 mt-3">
+            Manage your upcoming restaurant bookings.
+          </p>
+        </div>
+
+        <div id="reservationContainer" class="space-y-6"></div>
+      </div>
+    </section>
+
+    <script>
+      async function loadReservations() {
+        try {
+          const response = await fetch("/api/my-reservations");
+
+          const data = await response.json();
+
+          const container = document.getElementById("reservationContainer");
+
+          container.innerHTML = "";
+
+          if (data.reservations.length === 0) {
+            container.innerHTML = `
+
+<div class="bg-white rounded-3xl p-10 text-center border">
+
+<h2 class="text-2xl font-bold">
+No Reservations
+</h2>
+
+<p class="text-gray-500 mt-2">
+You have not booked any table yet.
+</p>
+
+<a href="/reservation"
+class="inline-block mt-6 bg-[#2C2118] text-white px-8 py-3 rounded-full"
+>
+Reserve Table
+</a>
+
+</div>
+
+`;
+
+            return;
+          }
+
+          data.reservations.forEach((reservation) => {
+            const card = document.createElement("div");
+
+            card.className = `
+bg-white
+border
+border-[#E9DFD3]
+rounded-3xl
+p-7
+shadow-sm
+`;
+
+            card.innerHTML = `
+
+
+<div class="flex justify-between items-start">
+
+
+<div>
+
+
+<h2 class="text-2xl font-bold">
+
+Table ${reservation.table.tableNumber}
+
+</h2>
+
+
+<p class="text-gray-500 mt-2">
+
+📍 ${reservation.table.location}
+
+</p>
+
+
+</div>
+
+
+
+<span
+class="px-4 py-2 rounded-full text-sm
+${
+  reservation.status === "confirmed"
+    ? "bg-green-100 text-green-700"
+    : "bg-red-100 text-red-700"
+}
+"
+>
+
+${reservation.status}
+
+</span>
+
+
+
+</div>
+
+
+
+
+<div class="grid md:grid-cols-3 gap-5 mt-6">
+
+
+<div>
+
+<p class="text-gray-400 text-sm">
+Date
+</p>
+
+<p class="font-semibold">
+${reservation.reservationDate}
+</p>
+
+</div>
+
+
+
+<div>
+
+<p class="text-gray-400 text-sm">
+Time
+</p>
+
+<p class="font-semibold">
+${reservation.startTime}
+-
+${reservation.endTime}
+</p>
+
+</div>
+
+
+
+<div>
+
+<p class="text-gray-400 text-sm">
+People
+</p>
+
+<p class="font-semibold">
+${reservation.numberOfPeople}
+</p>
+
+</div>
+
+
+</div>
+
+
+
+<div class="mt-6 flex gap-3">
+
+
+<a
+
+href="/reservations/${reservation._id}"
+
+class="px-6 py-3 border rounded-full hover:bg-[#F8F4EE]"
+>
+
+View Details
+
+</a>
+
+
+
+
+${
+reservation.status === "confirmed"
+
+?
+
+`
+
+<button
+
+onclick="cancelReservation('${reservation._id}')"
+
+class="px-6 py-3 bg-red-600 text-white rounded-full hover:bg-red-700"
+
+>
+
+Cancel Reservation
+
+</button>
+
+`
+
+:
+
+`
+
+<span
+
+class="px-6 py-3 bg-gray-200 text-gray-500 rounded-full"
+
+>
+
+Cancelled
+
+</span>
+
+`
+
+}
+
+
+
+</div>
+
+
+
+`;
+
+            container.appendChild(card);
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      async function cancelReservation(id) {
+        const confirmCancel = confirm("Are you sure you want to cancel?");
+
+        if (!confirmCancel) return;
+
+        const response = await fetch(
+        `/api/reservations/${id}/cancel`,
+        {
+        method:"POST"
+        }
+        );
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        loadReservations();
+      }
+
+      loadReservations();
+    </script>
+  </body>
+</html>

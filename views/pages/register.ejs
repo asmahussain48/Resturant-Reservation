@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Create Account | Royal Taste</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-[#FAF7F2]">
+    <div class="min-h-screen grid">
+        <!-- RIGHT SIDE -->
+
+        <div class="flex items-center justify-center px-6 py-12">
+            <div class="w-full max-w-md">
+                <!-- MOBILE LOGO -->
+
+                <div class="lg:hidden text-center mb-10">
+                    <a href="/" class="text-3xl font-serif font-bold text-[#8B5E34]">
+                        🍂 Royal Taste
+                    </a>
+                </div>
+
+                <div class="mb-9">
+                    <p class="text-[#8B5E34] uppercase tracking-[4px] text-sm mb-3">
+                        New Guest
+                    </p>
+
+                    <h2 class="text-5xl font-serif font-bold text-[#1C1917]">
+                        Create account
+                    </h2>
+
+                    <p class="text-gray-500 mt-3">
+                        Start your Royal Taste dining experience.
+                    </p>
+                </div>
+
+                <!-- SUCCESS MESSAGE -->
+
+                <div id="successMessage"
+                    class="hidden mb-5 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl"></div>
+
+                <!-- ERROR MESSAGE -->
+
+                <div id="errorMessage"
+                    class="hidden mb-5 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl"></div>
+
+                <!-- REGISTER FORM -->
+
+                <form id="registerForm">
+                    <!-- NAME -->
+
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Full Name
+                        </label>
+
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required
+                            class="w-full bg-white border border-stone-200 px-4 py-4 rounded-2xl outline-none transition focus:border-[#8B5E34] focus:ring-2 focus:ring-[#8B5E34]/10" />
+                    </div>
+
+                    <!-- EMAIL -->
+
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Email Address
+                        </label>
+
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required
+                            class="w-full bg-white border border-stone-200 px-4 py-4 rounded-2xl outline-none transition focus:border-[#8B5E34] focus:ring-2 focus:ring-[#8B5E34]/10" />
+                    </div>
+
+                    <!-- PHONE -->
+
+                    <div class="mb-4">
+                        <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Phone Number
+                        </label>
+
+                        <input type="text" id="phone" name="phone" placeholder="03001234567" required
+                            class="w-full bg-white border border-stone-200 px-4 py-4 rounded-2xl outline-none transition focus:border-[#8B5E34] focus:ring-2 focus:ring-[#8B5E34]/10" />
+                    </div>
+
+                    <!-- PASSWORD -->
+
+                    <div class="mb-7">
+                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Password
+                        </label>
+
+                        <input type="password" id="password" name="password" placeholder="Minimum 6 characters" required
+                            minlength="6"
+                            class="w-full bg-white border border-stone-200 px-4 py-4 rounded-2xl outline-none transition focus:border-[#8B5E34] focus:ring-2 focus:ring-[#8B5E34]/10" />
+                    </div>
+
+                    <!-- REGISTER BUTTON -->
+
+                    <button id="registerButton" type="submit"
+                        class="w-full bg-[#8B5E34] text-white py-4 rounded-2xl font-semibold hover:bg-[#6F451F] transition duration-300 shadow-lg shadow-[#8B5E34]/20 disabled:opacity-60">
+                        Create Account
+                    </button>
+                </form>
+
+                <!-- LOGIN LINK -->
+
+                <div class="text-center mt-8 pt-8 border-t border-stone-200">
+                    <p class="text-gray-500">
+                        Already have an account?
+
+                        <a href="/login" class="text-[#8B5E34] font-semibold hover:underline">
+                            Sign in
+                        </a>
+                    </p>
+                </div>
+
+                <div class="text-center mt-5">
+                    <a href="/" class="text-sm text-gray-400 hover:text-[#8B5E34]">
+                        ← Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTER JAVASCRIPT -->
+
+    <script>
+        const registerForm = document.getElementById("registerForm");
+
+        const registerButton = document.getElementById("registerButton");
+
+        const errorMessage = document.getElementById("errorMessage");
+
+        const successMessage = document.getElementById("successMessage");
+
+        registerForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+
+            const email = document.getElementById("email").value.trim();
+
+            const phone = document.getElementById("phone").value.trim();
+
+            const password = document.getElementById("password").value;
+
+            errorMessage.classList.add("hidden");
+
+            successMessage.classList.add("hidden");
+
+            registerButton.disabled = true;
+
+            registerButton.textContent = "Creating account...";
+
+            try {
+                const response = await fetch("/register", {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        phone,
+                        password,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    errorMessage.textContent = data.message || "Registration failed";
+
+                    errorMessage.classList.remove("hidden");
+
+                    registerButton.disabled = false;
+
+                    registerButton.textContent = "Create Account";
+
+                    return;
+                }
+
+                successMessage.textContent =
+                    "Account created successfully. Redirecting to login...";
+
+                successMessage.classList.remove("hidden");
+
+                registerForm.reset();
+
+                setTimeout(function () {
+                    window.location.href = "/login";
+                }, 1000);
+            } catch (error) {
+                console.log(error);
+
+                errorMessage.textContent = "Unable to connect to the server.";
+
+                errorMessage.classList.remove("hidden");
+
+                registerButton.disabled = false;
+
+                registerButton.textContent = "Create Account";
+            }
+        });
+    </script>
+</body>
+
+</html>

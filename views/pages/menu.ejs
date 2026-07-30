@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Our Menu | Royal Taste</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+
+<body class="bg-[#F8F4EE] text-[#211A15]">
+
+
+    <!-- TOP BRAND -->
+
+    <section class="pt-14 pb-8 px-6">
+
+        <section class="pt-8 pb-8 px-6">
+
+            <div class="max-w-7xl mx-auto">
+
+
+                <div class="flex justify-end mb-6">
+
+                    <button id="logoutButton" class="
+                    bg-[#2C2118]
+                    text-white
+                    px-6
+                    py-3
+                    rounded-full
+                    text-sm
+                    hover:bg-[#8B5E34]
+                    transition
+                    duration-300
+                    ">
+
+                        Logout
+
+                    </button>
+
+                </div>
+
+
+
+                <div class="text-center">
+
+                    <p class="text-[#8B5E34] uppercase tracking-[6px] text-xs font-semibold">
+                        Royal Taste
+                    </p>
+
+
+                    <h1 class="font-serif text-5xl md:text-6xl font-bold mt-4">
+                        Discover Our Menu
+                    </h1>
+
+
+                    <p class="text-gray-500 mt-4 max-w-2xl mx-auto leading-relaxed">
+                        Carefully prepared dishes, rich flavors and something
+                        delicious for every mood.
+                    </p>
+
+                </div>
+
+        </section>
+
+
+
+        <!-- CATEGORY BUTTONS -->
+
+        <section class="px-6 pb-10">
+
+            <div id="categoryButtons" class="max-w-6xl mx-auto flex justify-center gap-3 flex-wrap">
+
+                <button data-category="All"
+                    class="category-btn bg-[#2C2118] text-white px-6 py-3 rounded-full text-sm font-medium">
+                    All Menu
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- LOADING -->
+
+        <div id="loading" class="py-24 text-center">
+
+            <div class="text-6xl">
+                🍽️
+            </div>
+
+            <p class="text-gray-500 mt-4">
+                Preparing the menu...
+            </p>
+
+        </div>
+
+
+
+        <!-- ERROR -->
+
+        <div id="errorMessage"
+            class="hidden max-w-xl mx-auto bg-red-50 border border-red-200 text-red-600 p-5 rounded-2xl text-center">
+        </div>
+
+
+
+        <!-- FOOD GRID -->
+
+        <main id="menuGrid"
+            class="hidden max-w-7xl mx-auto px-6 pb-40 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
+        </main>
+
+
+
+        <!-- FIXED RESERVE BUTTON -->
+
+        <div class="fixed bottom-6 left-0 right-0 z-50 flex justify-center px-6">
+
+            <a href="/reservation"
+                class="group bg-[#2C2118] text-white px-8 md:px-12 py-4 rounded-full shadow-2xl flex items-center gap-4 hover:bg-[#8B5E34] hover:-translate-y-1 transition duration-300">
+
+                <div class="text-left">
+
+                    <p class="text-[10px] uppercase tracking-[3px] text-[#D4A574]">
+                        Ready to dine?
+                    </p>
+
+                    <p class="font-semibold text-lg">
+                        Reserve Your Table
+                    </p>
+
+                </div>
+
+
+                <span
+                    class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:translate-x-1 transition">
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+
+
+        <script>
+
+            let allMenuItems = [];
+
+            let selectedCategory = "All";
+
+
+            const menuGrid =
+                document.getElementById("menuGrid");
+
+            const loading =
+                document.getElementById("loading");
+
+            const errorMessage =
+                document.getElementById("errorMessage");
+
+
+            //Is container ke andar dynamic category buttons add hote hain. ALL Piza etc
+            const categoryButtons =
+                document.getElementById("categoryButtons");
+
+
+
+            function getFoodEmoji(item) {
+
+                const name =
+                    item.name.toLowerCase();
+
+                const category =
+                    item.category.toLowerCase();
+
+
+                if (
+                    name.includes("pizza") ||
+                    category.includes("pizza")
+                ) {
+                    return "🍕";
+                }
+
+
+                if (name.includes("burger")) {
+                    return "🍔";
+                }
+
+
+                if (
+                    name.includes("biryani") ||
+                    category.includes("rice")
+                ) {
+                    return "🍛";
+                }
+
+
+                if (
+                    name.includes("pasta")
+                ) {
+                    return "🍝";
+                }
+
+
+                if (
+                    name.includes("fries")
+                ) {
+                    return "🍟";
+                }
+
+
+                if (
+                    category.includes("drink") ||
+                    name.includes("shake") ||
+                    name.includes("drink") ||
+                    name.includes("water")
+                ) {
+                    return "🥤";
+                }
+
+
+                if (
+                    category.includes("dessert") ||
+                    name.includes("cake") ||
+                    name.includes("brownie") ||
+                    name.includes("ice cream")
+                ) {
+                    return "🍰";
+                }
+
+
+                if (
+                    category.includes("bbq") ||
+                    name.includes("tikka") ||
+                    name.includes("kebab")
+                ) {
+                    return "🍢";
+                }
+
+
+                if (
+                    category.includes("salad")
+                ) {
+                    return "🥗";
+                }
+
+
+                if (
+                    category.includes("sandwich")
+                ) {
+                    return "🥪";
+                }
+
+
+                if (
+                    name.includes("shawarma")
+                ) {
+                    return "🌯";
+                }
+
+
+                if (
+                    name.includes("soup")
+                ) {
+                    return "🍲";
+                }
+
+
+                if (
+                    category.includes("pakistani") ||
+                    name.includes("karahi")
+                ) {
+                    return "🥘";
+                }
+
+
+                return "🍽️";
+            }
+
+
+
+            function createCategories() {
+
+                //Set duplicate values remove karta hai.
+                //... spread operator Set ko normal array mein convert karta hai.
+                const categories = [
+                    ...new Set(
+                        allMenuItems.map(
+                            item => item.category
+                        )
+                    )
+                ];
+
+
+                categories.forEach(category => {
+
+                    const button =
+                        document.createElement("button");
+
+
+                    button.textContent =
+                        category;
+
+                    button.dataset.category =
+                        category;
+
+
+                    button.className =
+                        "category-btn bg-white border border-[#DED3C6] text-gray-600 px-6 py-3 rounded-full text-sm font-medium hover:border-[#8B5E34] hover:text-[#8B5E34] transition";
+
+
+                    categoryButtons.appendChild(button);
+
+                });
+
+
+                document
+                    .querySelectorAll(".category-btn")
+                    .forEach(button => {
+
+                        button.addEventListener(
+                            "click",
+                            function () {
+
+                                selectedCategory =
+                                    this.dataset.category;
+
+
+                                updateCategoryButtons();
+
+                                renderMenu();
+
+                            }
+                        );
+
+                    });
+
+            }
+
+
+
+            function updateCategoryButtons() {
+
+                document
+                    .querySelectorAll(".category-btn")
+                    .forEach(button => {
+
+                        if (
+                            button.dataset.category ===
+                            selectedCategory
+                        ) {
+
+                            button.className =
+                                "category-btn bg-[#2C2118] text-white px-6 py-3 rounded-full text-sm font-medium";
+
+                        } else {
+
+                            button.className =
+                                "category-btn bg-white border border-[#DED3C6] text-gray-600 px-6 py-3 rounded-full text-sm font-medium hover:border-[#8B5E34] hover:text-[#8B5E34] transition";
+
+                        }
+
+                    });
+
+            }
+
+
+
+            function renderMenu() {
+
+                menuGrid.innerHTML = "";
+
+
+                let items =
+                    allMenuItems;
+
+
+                if (selectedCategory !== "All") {
+
+                    items =
+                        allMenuItems.filter(
+                            item =>
+                                item.category === selectedCategory
+                        );
+
+                }
+
+
+                items.forEach(item => {
+
+                    const card =
+                        document.createElement("article");
+
+
+                    card.className =
+                        "group bg-white rounded-[30px] overflow-hidden border border-[#ECE3D8] hover:-translate-y-2 hover:shadow-2xl transition duration-300";
+
+
+                    card.innerHTML = `
+
+          <div
+            class="h-52 bg-gradient-to-br from-[#EFE2D1] via-[#FAF4EC] to-[#E9D8C1] flex items-center justify-center relative overflow-hidden"
+          >
+
+            <div
+              class="absolute w-32 h-32 bg-white/40 rounded-full"
+            ></div>
+
+
+            <div
+              class="relative text-8xl group-hover:scale-110 group-hover:-rotate-3 transition duration-300"
+            >
+              ${getFoodEmoji(item)}
+            </div>
+
+          </div>
+
+
+          <div class="p-6">
+
+
+            <p
+              class="text-[10px] uppercase tracking-[3px] text-[#8B5E34] font-semibold"
+            >
+              ${item.category}
+            </p>
+
+
+            <h2
+              class="font-serif text-2xl font-bold mt-2"
+            >
+              ${item.name}
+            </h2>
+
+
+            <p
+              class="text-sm text-gray-500 leading-relaxed mt-3 min-h-[42px]"
+            >
+              ${item.description}
+            </p>
+
+
+            <div
+              class="flex items-end justify-between mt-6 pt-5 border-t border-[#F0E7DD]"
+            >
+
+              <div>
+
+                <p
+                  class="text-[10px] uppercase tracking-[2px] text-gray-400"
+                >
+                  Price
+                </p>
+
+
+                <p
+                  class="text-2xl font-bold text-[#8B5E34] mt-1"
+                >
+                  Rs ${item.price}
+                </p>
+
+              </div>
+
+
+              <span
+                class="bg-[#F4ECE2] text-[#8B5E34] text-xs px-3 py-2 rounded-full"
+              >
+                Available
+              </span>
+
+            </div>
+
+          </div>
+
+        `;
+
+
+                    menuGrid.appendChild(card);
+
+                });
+
+            }
+
+
+
+            async function loadMenu() {
+
+                try {
+
+                    const response =
+                        await fetch("/api/menu");
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        loading.classList.add("hidden");
+
+
+                        errorMessage.textContent =
+                            data.message ||
+                            "Unable to load the menu.";
+
+                        errorMessage.classList.remove("hidden");
+
+                        return;
+
+                    }
+
+
+                    allMenuItems =
+                        data.menu;
+
+
+                    createCategories();
+
+                    renderMenu();
+
+
+                    loading.classList.add("hidden");
+
+                    menuGrid.classList.remove("hidden");
+
+
+                } catch (error) {
+
+                    console.log(error);
+
+
+                    loading.classList.add("hidden");
+
+
+                    errorMessage.textContent =
+                        "Unable to connect to the server.";
+
+                    errorMessage.classList.remove("hidden");
+
+                }
+
+            }
+
+
+            loadMenu();
+            const logoutButton =
+document.getElementById("logoutButton");
+
+
+logoutButton.addEventListener(
+"click",
+async function(){
+
+
+    const response =
+    await fetch(
+        "/logout",
+        {
+            method:"POST"
+        }
+    );
+
+
+    const data =
+    await response.json();
+
+
+
+    if(data.success){
+
+        window.location.href="/login";
+
+    }
+    else{
+
+        alert(data.message);
+
+    }
+
+
+});
+        </script>
+
+
+</body>
+
+</html>
