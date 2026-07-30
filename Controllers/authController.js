@@ -80,7 +80,6 @@ async function registerUser(req, res) {
 
 async function loginUser(req, res) {
   try {
-
     const { email, password } = req.body;
 
     // Check empty fields
@@ -104,10 +103,7 @@ async function loginUser(req, res) {
     }
 
     // Compare password
-    const isMatch = await bcrypt.compare(
-      password,
-      user.passwordHash
-    );
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
 
     if (!isMatch) {
       return res.status(401).json({
@@ -117,22 +113,42 @@ async function loginUser(req, res) {
     }
 
     // Create Session
+
     req.session.user = {
       id: user._id,
+
+      name: user.name,
+
       role: user.role,
     };
 
+    // Decide where user goes
+
+    let redirect;
+
+    if (user.role === "admin") {
+      redirect = "/admin/dashboard-page";
+    } else {
+      redirect = "/menu";
+    }
+
     return res.status(200).json({
       success: true,
+
       message: "Login successful",
+
+      redirect,
+
       user: {
         id: user._id,
+
         name: user.name,
+
         email: user.email,
+
         role: user.role,
       },
     });
-
   } catch (error) {
 
     console.log(error);

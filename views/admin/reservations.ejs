@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin Reservations | Royal Taste</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-[#F8F4EE] text-[#211A15]">
+    <div class="p-10">
+      <h1 class="text-5xl font-serif font-bold">Reservations</h1>
+
+      <p class="text-gray-500 mt-2">Manage customer bookings</p>
+
+      <div class="bg-white rounded-3xl shadow mt-10 overflow-hidden">
+        <table class="w-full">
+          <thead class="bg-[#2C2118] text-white">
+            <tr>
+              <th class="p-4 text-left">Customer</th>
+
+              <th class="p-4">Phone</th>
+
+              <th class="p-4">Date</th>
+
+              <th class="p-4">Time</th>
+
+              <th class="p-4">Table</th>
+
+              <th class="p-4">People</th>
+
+              <th class="p-4">Status</th>
+
+              <th class="p-4">Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="reservationTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="/js/adminReservations.js"></script>
+  </body>
+</html>

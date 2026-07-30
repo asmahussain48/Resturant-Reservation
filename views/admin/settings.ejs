@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Admin Settings | Royal Taste
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-[#F8F4EE] text-[#211A15]">
+
+
+    <div class="p-10 max-w-4xl mx-auto">
+
+
+        <h1 class="text-5xl font-serif font-bold">
+            Restaurant Settings
+        </h1>
+
+
+        <p class="text-gray-500 mt-2">
+            Manage restaurant timing and availability
+        </p>
+
+
+
+
+        <div class="bg-white rounded-3xl p-8 mt-10 shadow">
+
+
+            <div class="grid md:grid-cols-2 gap-6">
+
+
+                <div>
+
+                    <label>
+                        Opening Time
+                    </label>
+
+                    <input id="openingTime" type="time" class="border p-3 rounded-xl w-full mt-2" />
+
+                </div>
+
+
+
+                <div>
+
+                    <label>
+                        Closing Time
+                    </label>
+
+                    <input id="closingTime" type="time" class="border p-3 rounded-xl w-full mt-2" />
+
+                </div>
+
+
+
+                <div>
+
+                    <label>
+                        Slot Duration (Hours)
+                    </label>
+
+
+                    <input id="slotDuration" type="number" class="border p-3 rounded-xl w-full mt-2" />
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+            <div class="mt-8">
+
+
+                <p class="font-semibold">
+                    Restaurant Status
+                </p>
+
+
+
+                <button id="statusButton" onclick="toggleStatus()" class="
+mt-3
+px-6
+py-3
+rounded-full
+text-white
+">
+
+                </button>
+
+
+
+            </div>
+
+
+
+
+
+            <button onclick="saveSettings()" class="
+mt-10
+bg-[#8B5E34]
+text-white
+px-8
+py-3
+rounded-full
+">
+
+                Save Changes
+
+            </button>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+    <script src="/js/adminSettings.js"></script>
+
+
+</body>
+
+</html>

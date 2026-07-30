@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Admin Menu | Royal Taste</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+
+<body class="bg-[#F8F4EE] text-[#211A15]">
+
+
+    <section class="px-8 py-12">
+
+
+        <div class="max-w-6xl mx-auto">
+
+
+            <h1 class="text-5xl font-serif font-bold">
+                Menu Management
+            </h1>
+
+
+            <p class="text-gray-500 mt-2">
+                Manage restaurant food items
+            </p>
+
+
+
+            <!-- ADD MENU -->
+
+
+            <div class="bg-white rounded-3xl p-8 mt-10 border">
+
+
+                <h2 class="text-2xl font-bold mb-6">
+                    Add New Item
+                </h2>
+
+
+
+                <div class="grid md:grid-cols-4 gap-4">
+
+
+                    <input id="name" placeholder="Name" class="border p-3 rounded-xl" />
+
+
+
+                    <input id="description" placeholder="Description" class="border p-3 rounded-xl" />
+
+
+
+                    <input id="category" placeholder="Category" class="border p-3 rounded-xl" />
+
+
+
+                    <input id="price" placeholder="Price" class="border p-3 rounded-xl" />
+
+
+
+                </div>
+
+
+
+                <button onclick="addItem()" class="mt-5 bg-[#8B5E34] text-white px-8 py-3 rounded-full">
+                    Save
+                </button>
+
+
+            </div>
+
+
+
+
+
+            <!-- MENU LIST -->
+
+
+            <div id="menuContainer" class="grid md:grid-cols-3 gap-6 mt-10">
+            </div>
+
+
+
+        </div>
+
+    </section>
+
+
+
+    <script>
+
+
+        async function loadMenu() {
+
+
+            const response =
+                await fetch("/admin/api/menu");
+
+
+            const data =
+                await response.json();
+
+
+
+            const container =
+                document.getElementById("menuContainer");
+
+
+            container.innerHTML = "";
+
+
+
+            data.menu.forEach(item => {
+
+
+                container.innerHTML += `
+
+
+<div class="bg-white rounded-3xl p-6 border">
+
+
+<h2 class="text-2xl font-bold">
+${item.name}
+</h2>
+
+
+<p class="text-gray-500 mt-2">
+${item.description}
+</p>
+
+
+<p class="mt-3">
+Category:
+${item.category}
+</p>
+
+
+<p class="font-bold mt-2">
+Rs ${item.price}
+</p>
+
+
+
+<p class="mt-2 ${item.available
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }">
+${item.available ? "Available" : "Not Available"}
+</p>
+
+
+
+<div class="flex gap-3 mt-5">
+
+
+<button
+
+onclick="toggleStatus('${item._id}', ${item.available})"
+
+class="px-5 py-2 rounded-full bg-[#8B5E34] text-white"
+
+>
+
+${item.available ? "Disable" : "Enable"}
+
+</button>
+
+
+
+<button
+
+onclick="deleteItem('${item._id}')"
+
+class="px-5 py-2 rounded-full bg-red-600 text-white"
+
+>
+Delete
+</button>
+
+<button
+
+onclick="editItem('${item._id}')"
+
+class="px-5 py-2 rounded-full border"
+
+>
+Edit
+</button>
+
+</div>
+
+
+</div>
+
+
+`;
+
+
+
+            });
+
+
+
+        }
+
+
+
+
+
+        async function addItem() {
+
+
+            const item = {
+
+
+                name:
+                    document.getElementById("name").value,
+
+
+                description:
+                    document.getElementById("description").value,
+
+
+                category:
+                    document.getElementById("category").value,
+
+
+                price:
+                    Number(document.getElementById("price").value)
+
+
+
+            };
+
+
+
+            const response =
+            await fetch("/admin/api/menu", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(item)
+
+
+                });
+
+
+
+            const data =
+                await response.json();
+
+
+
+            alert(data.message);
+
+
+
+            loadMenu();
+
+
+        }
+
+
+
+
+
+        async function deleteItem(id) {
+
+
+            if (!confirm("Delete this item?"))
+                return;
+
+
+
+                await fetch(`/admin/api/menu/${id}`, {
+
+
+                method: "DELETE"
+
+
+            });
+
+
+
+            loadMenu();
+
+
+        }
+        
+        async function toggleStatus(id, currentStatus) {
+
+            await fetch(`/admin/api/menu/${id}/status`, {
+
+
+                    method: "PATCH",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        available: !currentStatus
+
+                    })
+
+
+                });
+
+
+
+                loadMenu();
+
+
+            }
+
+
+                async function editItem(id) {
+
+
+                    const name =
+                        prompt("Enter new name");
+
+
+                    const price =
+                        prompt("Enter new price");
+
+
+
+                        await fetch(`/admin/api/menu/${id}`, {
+                        method: "PUT",
+
+                        headers: {
+
+                            "Content-Type": "application/json"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            name,
+
+                            price: Number(price)
+
+                        })
+
+
+                    });
+
+
+                    loadMenu();
+
+
+                }
+
+        loadMenu();
+
+
+
+    </script>
+
+
+</body>
+
+</html>

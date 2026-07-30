@@ -45,6 +45,19 @@ const menuRoutes = require("./routes/menuRoutes");
 
 const settingsRoutes = require("./routes/settingsRoutes");
 
+const adminRoutes = require("./routes/adminRoutes");
+
+const adminReservationRoutes = require("./routes/adminReservationRoutes");
+
+const adminTableRoutes = require("./routes/adminTableRoutes");
+
+const adminSettingRoutes = require("./routes/adminSettingRoutes");
+
+const adminMenuRoutes = require("./routes/adminMenuRoutes");
+
+const adminCustomerRoutes = require("./routes/adminCustomerRoutes");
+
+const adminAnalyticsRoutes = require("./routes/adminAnalyticsRoutes");
 // ======================
 // Session
 // ======================
@@ -114,8 +127,6 @@ app.get("/check-tables", async (req, res) => {
   }
 });
 
-
-
 // ======================
 // Routes Use
 // ======================
@@ -134,6 +145,19 @@ app.use("/", menuRoutes);
 
 app.use("/", settingsRoutes);
 
+app.use("/", adminRoutes);
+
+app.use("/", adminReservationRoutes);
+
+app.use("/", adminTableRoutes);
+
+app.use("/", adminSettingRoutes);
+
+app.use("/", adminMenuRoutes);
+
+app.use("/", adminCustomerRoutes);
+
+app.use("/", adminAnalyticsRoutes);
 // ======================
 // Export
 // ======================

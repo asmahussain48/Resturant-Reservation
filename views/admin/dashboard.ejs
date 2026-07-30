@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Admin Dashboard | Royal Taste
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body class="bg-[#F8F4EE] text-[#211A15]">
+
+
+    <div class="min-h-screen flex">
+
+
+
+        <!-- Sidebar -->
+
+        <aside class="w-64 bg-[#2C2118] text-white p-8">
+
+
+            <h1 class="text-3xl font-serif font-bold text-[#D6A36A]">
+
+                🍂 Royal Taste
+
+            </h1>
+
+
+            <p class="text-gray-300 mt-2">
+
+                Admin Panel
+
+            </p>
+
+
+
+            <div class="mt-10 space-y-4">
+
+
+                <a href="/admin/dashboard" class="block bg-[#8B5E34] rounded-xl px-4 py-3">
+
+                    Dashboard
+
+                </a>
+
+
+                <a href="/admin/reservations" class="block hover:text-[#D6A36A]">
+
+                    Reservations
+
+                </a>
+
+
+                <a href="/admin/tables" class="block hover:text-[#D6A36A]">
+
+                    Tables
+
+                </a>
+
+
+                <a href="/admin/menu" class="block hover:text-[#D6A36A]">
+
+                    Menu
+
+                </a>
+
+
+                <a href="/admin/settings" class="block hover:text-[#D6A36A]">
+
+                    Settings
+
+                </a>
+
+
+
+            </div>
+
+
+        </aside>
+
+
+
+
+
+        <!-- Main Content -->
+
+        <main class="flex-1 p-10">
+
+
+            <div class="flex justify-between items-center">
+
+
+                <div>
+
+                    <h1 class="text-5xl font-serif font-bold">
+
+                        Dashboard
+
+                    </h1>
+
+
+                    <p class="text-gray-500 mt-2">
+
+                        Restaurant overview
+
+                    </p>
+
+
+                </div>
+
+
+
+
+                <button id="logoutButton" class="
+bg-[#8B5E34]
+text-white
+px-6
+py-3
+rounded-full
+">
+
+                    Logout
+
+                </button>
+
+
+
+            </div>
+
+
+
+
+
+
+            <!-- Cards -->
+
+
+            <div class="grid md:grid-cols-3 gap-6 mt-10">
+
+
+
+                <div class="bg-white rounded-3xl p-6 shadow">
+
+                    <p class="text-gray-400">
+
+                        Today's Reservations
+
+                    </p>
+
+
+                    <h2 id="todayReservations" class="text-4xl font-bold mt-3">
+
+                        0
+
+                    </h2>
+
+
+                </div>
+
+
+
+
+
+                <div class="bg-white rounded-3xl p-6 shadow">
+
+                    <p class="text-gray-400">
+
+                        Upcoming Reservations
+
+                    </p>
+
+
+                    <h2 id="upcomingReservations" class="text-4xl font-bold mt-3">
+
+                        0
+
+                    </h2>
+
+
+                </div>
+
+
+
+
+
+
+                <div class="bg-white rounded-3xl p-6 shadow">
+
+                    <p class="text-gray-400">
+
+                        Today's Guests
+
+                    </p>
+
+
+                    <h2 id="todayGuests" class="text-4xl font-bold mt-3">
+
+                        0
+
+                    </h2>
+
+
+                </div>
+
+
+
+
+                <div class="bg-white rounded-3xl p-6 shadow">
+
+                    <p class="text-gray-400">
+
+                        Available Tables
+
+                    </p>
+
+
+                    <h2 id="availableTables" class="text-4xl font-bold mt-3">
+
+                        0
+
+                    </h2>
+
+
+                </div>
+
+
+
+
+
+                <div class="bg-white rounded-3xl p-6 shadow">
+
+                    <p class="text-gray-400">
+
+                        Occupied Tables
+
+                    </p>
+
+
+                    <h2 id="occupiedTables" class="text-4xl font-bold mt-3">
+
+                        0
+
+                    </h2>
+
+
+                </div>
+
+
+
+
+
+
+                <div class="bg-white rounded-3xl p-6 shadow">
+
+                    <p class="text-gray-400">
+
+                        Cancelled
+
+                    </p>
+
+
+                    <h2 id="cancelledReservations" class="text-4xl font-bold mt-3">
+
+                        0
+
+                    </h2>
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+        
+        
+        <!-- Charts -->
+        
+        <div class="grid lg:grid-cols-2 gap-8 mt-10">
+        
+        
+            <div class="bg-white rounded-3xl p-6 shadow">
+        
+                <h2 class="text-xl font-bold mb-5">
+                    Weekly Reservations
+                </h2>
+        
+                <div class="h-72">
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+        
+            </div>
+        
+        
+        
+        
+            <div class="bg-white rounded-3xl p-6 shadow">
+        
+                <h2 class="text-xl font-bold mb-5">
+                    Peak Hours
+                </h2>
+        
+                <div class="h-72">
+                    <canvas id="peakChart"></canvas>
+                </div>
+        
+            </div>
+        
+        
+        
+        
+        
+            <div class="bg-white rounded-3xl p-6 shadow">
+        
+                <h2 class="text-xl font-bold mb-5">
+                    Table Usage
+                </h2>
+        
+                <div class="h-72">
+                    <canvas id="tableChart"></canvas>
+                </div>
+        
+            </div>
+        
+        
+        
+        
+        
+            <div class="bg-white rounded-3xl p-6 shadow">
+        
+                <h2 class="text-xl font-bold mb-5">
+                    Customer Growth
+                </h2>
+        
+                <div class="h-72">
+                    <canvas id="customerChart"></canvas>
+                </div>
+        
+            </div>      </div>
+
+    <script src="/js/adminDashboard.js"></script>
+
+
+</body>
+
+</html>

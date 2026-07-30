@@ -1,380 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-  <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reserve Your Table | Royal Taste</title>
 
-  <title>Reserve Your Table | Royal Taste</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+  <body class="bg-[#F8F4EE] text-[#211A15] min-h-screen">
+    <!-- HEADER -->
 
-<body class="bg-[#F8F4EE] text-[#211A15] min-h-screen">
-  <!-- HEADER -->
+    <section class="px-6 pt-12 pb-8">
+      <div class="max-w-5xl mx-auto">
+        <a href="/menu" class="text-sm text-gray-500 hover:text-[#8B5E34]">
+          ← Back to Menu
+        </a>
 
-  <section class="px-6 pt-12 pb-8">
-    <div class="max-w-5xl mx-auto">
-      <a href="/menu" class="text-sm text-gray-500 hover:text-[#8B5E34]">
-        ← Back to Menu
-      </a>
+        <div class="text-center mt-8">
+          <p
+            class="uppercase tracking-[5px] text-xs text-[#8B5E34] font-semibold"
+          >
+            Royal Taste
+          </p>
 
-      <div class="text-center mt-8">
-        <p class="uppercase tracking-[5px] text-xs text-[#8B5E34] font-semibold">
-          Royal Taste
-        </p>
+          <h1 class="font-serif text-5xl md:text-6xl font-bold mt-4">
+            Reserve Your Table
+          </h1>
 
-        <h1 class="font-serif text-5xl md:text-6xl font-bold mt-4">
-          Reserve Your Table
-        </h1>
-
-        <p class="text-gray-500 mt-4 max-w-xl mx-auto">
-          Choose your date, time and party size. We will show available
-          tables.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROGRESS BAR -->
-
-  <section class="px-6 pb-10">
-    <div class="max-w-4xl mx-auto">
-      <div class="bg-white border border-[#E9DFD3] rounded-full px-5 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div id="progress1" class="w-8 h-8 rounded-full bg-[#2C2118] text-white flex items-center justify-center">
-            1
-          </div>
-
-          <span class="hidden sm:block text-sm font-semibold">
-            Date & Time
-          </span>
-        </div>
-
-        <div class="h-px flex-1 bg-[#DED5CA] mx-4"></div>
-
-        <div class="flex items-center gap-2">
-          <div id="progress2" class="w-8 h-8 rounded-full bg-[#EDE5DC] text-gray-500 flex items-center justify-center">
-            2
-          </div>
-
-          <span class="hidden sm:block text-sm text-gray-400">Table</span>
-        </div>
-
-        <div class="h-px flex-1 bg-[#DED5CA] mx-4"></div>
-
-        <div class="flex items-center gap-2">
-          <div id="progress3" class="w-8 h-8 rounded-full bg-[#EDE5DC] text-gray-500 flex items-center justify-center">
-            3
-          </div>
-
-          <span class="hidden sm:block text-sm text-gray-400">Details</span>
-        </div>
-
-        <div class="h-px flex-1 bg-[#DED5CA] mx-4"></div>
-
-        <div class="flex items-center gap-2">
-          <div id="progress4" class="w-8 h-8 rounded-full bg-[#EDE5DC] text-gray-500 flex items-center justify-center">
-            4
-          </div>
-
-          <span class="hidden sm:block text-sm text-gray-400">Confirm</span>
+          <p class="text-gray-500 mt-4 max-w-xl mx-auto">
+            Choose your date, time and party size. We will show available
+            tables.
+          </p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <main class="px-6 pb-20">
-    <!-- STEP 1 -->
-
-    <div id="stepOne" class="max-w-4xl mx-auto bg-white border border-[#E9DFD3] rounded-[35px] p-7 md:p-10 shadow-sm">
-      <div class="mb-10">
-        <p class="text-xs uppercase tracking-[4px] text-[#8B5E34]">Step 01</p>
-
-        <h2 class="font-serif text-3xl font-bold mt-2">
-          When would you like to visit?
-        </h2>
-
-        <p class="text-gray-500 mt-2">
-          Reservations are available Monday to Sunday.
-        </p>
-      </div>
-
-      <!-- DATE -->
-
-      <div class="mb-10">
-        <label class="block font-semibold mb-4">Choose Date</label>
-
-        <div id="dateOptions" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3"></div>
-      </div>
-
-      <!-- TIME -->
-
-      <div class="mb-10">
-        <label class="block font-semibold mb-4">
-          Choose 2-Hour Time Slot
-        </label>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          <button type="button" data-time="12:00" class="time-btn border border-[#DDD2C5] rounded-2xl py-4">
-            <span class="block font-semibold">12:00 PM</span>
-
-            <span class="text-xs text-gray-400">to 2:00 PM</span>
-          </button>
-
-          <button type="button" data-time="14:00" class="time-btn border border-[#DDD2C5] rounded-2xl py-4">
-            <span class="block font-semibold">2:00 PM</span>
-
-            <span class="text-xs text-gray-400">to 4:00 PM</span>
-          </button>
-
-          <button type="button" data-time="16:00" class="time-btn border border-[#DDD2C5] rounded-2xl py-4">
-            <span class="block font-semibold">4:00 PM</span>
-
-            <span class="text-xs text-gray-400">to 6:00 PM</span>
-          </button>
-
-          <button type="button" data-time="18:00" class="time-btn border border-[#DDD2C5] rounded-2xl py-4">
-            <span class="block font-semibold">6:00 PM</span>
-
-            <span class="text-xs text-gray-400">to 8:00 PM</span>
-          </button>
-
-          <button type="button" data-time="20:00" class="time-btn border border-[#DDD2C5] rounded-2xl py-4">
-            <span class="block font-semibold">8:00 PM</span>
-
-            <span class="text-xs text-gray-400">to 10:00 PM</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- PEOPLE -->
-
-      <div class="mb-10">
-        <label class="block font-semibold mb-4">Number of People</label>
-
-        <select id="numberOfPeople" class="w-full md:w-72 bg-[#FAF7F2] border border-[#DDD2C5] rounded-2xl px-5 py-4">
-          <option value="">Select party size</option>
-
-          <option value="1">1 Person</option>
-
-          <option value="2">2 People</option>
-
-          <option value="3">3 People</option>
-
-          <option value="4">4 People</option>
-
-          <option value="5">5 People</option>
-
-          <option value="6">6 People</option>
-
-          <option value="7">7 People</option>
-
-          <option value="8">8 People</option>
-
-          <option value="9">9 People</option>
-
-          <option value="10">10 People</option>
-        </select>
-      </div>
-
-      <div id="errorMessage" class="hidden bg-red-50 text-red-600 border border-red-200 rounded-2xl px-5 py-4 mb-6">
-      </div>
-
-      <div class="flex justify-end pt-6 border-t border-[#EEE5DB]">
-        <button id="findTablesButton" type="button"
-          class="bg-[#2C2118] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#8B5E34]">
-          Find Available Tables →
-        </button>
-      </div>
-    </div>
-    <!-- STEP 2 TABLES -->
-
-    <div id="tablesSection"
-      class="hidden max-w-4xl mx-auto mt-10 bg-white border border-[#E9DFD3] rounded-[35px] p-7 md:p-10">
-      <div class="mb-6">
-        <p class="text-xs uppercase tracking-[4px] text-[#8B5E34]">Step 02</p>
-
-        <h2 class="font-serif text-3xl font-bold mt-2">Choose Your Table</h2>
-
-        <p class="text-gray-500 mt-2">
-          Available tables for your selected time.
-        </p>
-      </div>
-
-      <div id="tablesGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-    </div>
-
-    <!-- STEP 3 CUSTOMER -->
-
-    <div id="customerSection"
-      class="hidden max-w-4xl mx-auto mt-10 bg-white border border-[#E9DFD3] rounded-[35px] p-7 md:p-10">
-      <div class="mb-6">
-        <p class="text-xs uppercase tracking-[4px] text-[#8B5E34]">Step 03</p>
-
-        <h2 class="font-serif text-3xl font-bold mt-2">Your Information</h2>
-
-        <p class="text-gray-500 mt-2">
-          Enter details to confirm reservation.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-5">
-        <div>
-          <label class="block font-semibold mb-2">Name</label>
-
-          <input id="customerName" type="text" placeholder="Enter your name"
-            class="w-full bg-[#FAF7F2] border border-[#DDD2C5] rounded-2xl px-5 py-4" />
-        </div>
-
-        <div>
-          <label class="block font-semibold mb-2">Phone</label>
-
-          <input id="customerPhone" type="text" placeholder="03xxxxxxxxx"
-            class="w-full bg-[#FAF7F2] border border-[#DDD2C5] rounded-2xl px-5 py-4" />
-        </div>
-      </div>
-
-      <button id="confirmReservationButton" class="bg-[#8B5E34] text-white px-8 py-3 rounded-xl">
-
-        Confirm Reservation
-
-      </button>
-    </div>
-    <section id="confirmationSection" class="hidden bg-white rounded-3xl p-10 mt-10 shadow-xl">
-      <div id="confirmationData"></div>
-
-      <a href="/my-reservations" class="inline-block mt-8 bg-[#8B5E34] text-white px-8 py-3 rounded-xl">
-        View My Reservations
-      </a>
     </section>
 
-    <script>
-      let selectedDate = "";
-      let selectedTime = "";
-      let selectedTable = null;
+    <!-- PROGRESS BAR -->
 
+    <section class="px-6 pb-10">
+      <div class="max-w-4xl mx-auto">
+        <div
+          class="bg-white border border-[#E9DFD3] rounded-full px-5 py-4 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-2">
+            <div
+              id="progress1"
+              class="w-8 h-8 rounded-full bg-[#2C2118] text-white flex items-center justify-center"
+            >
+              1
+            </div>
 
-      // Elements
+            <span class="hidden sm:block text-sm font-semibold">
+              Date & Time
+            </span>
+          </div>
 
-      const dateOptions = document.getElementById("dateOptions");
+          <div class="h-px flex-1 bg-[#DED5CA] mx-4"></div>
 
-      const timeButtons = document.querySelectorAll(".time-btn");
+          <div class="flex items-center gap-2">
+            <div
+              id="progress2"
+              class="w-8 h-8 rounded-full bg-[#EDE5DC] text-gray-500 flex items-center justify-center"
+            >
+              2
+            </div>
 
-      const numberOfPeople =
-        document.getElementById("numberOfPeople");
+            <span class="hidden sm:block text-sm text-gray-400">Table</span>
+          </div>
 
-      const findTablesButton =
-        document.getElementById("findTablesButton");
+          <div class="h-px flex-1 bg-[#DED5CA] mx-4"></div>
 
-      const stepOne =
-        document.getElementById("stepOne");
+          <div class="flex items-center gap-2">
+            <div
+              id="progress3"
+              class="w-8 h-8 rounded-full bg-[#EDE5DC] text-gray-500 flex items-center justify-center"
+            >
+              3
+            </div>
 
-      const tablesSection =
-        document.getElementById("tablesSection");
+            <span class="hidden sm:block text-sm text-gray-400">Details</span>
+          </div>
 
-      const tablesGrid =
-        document.getElementById("tablesGrid");
+          <div class="h-px flex-1 bg-[#DED5CA] mx-4"></div>
 
-      const customerSection =
-        document.getElementById("customerSection");
+          <div class="flex items-center gap-2">
+            <div
+              id="progress4"
+              class="w-8 h-8 rounded-full bg-[#EDE5DC] text-gray-500 flex items-center justify-center"
+            >
+              4
+            </div>
 
-      const customerName =
-        document.getElementById("customerName");
+            <span class="hidden sm:block text-sm text-gray-400">Confirm</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      const customerPhone =
-        document.getElementById("customerPhone");
+    <main class="px-6 pb-20">
+      <!-- STEP 1 -->
 
-      const progress1 =
-        document.getElementById("progress1");
+      <div
+        id="stepOne"
+        class="max-w-4xl mx-auto bg-white border border-[#E9DFD3] rounded-[35px] p-7 md:p-10 shadow-sm"
+      >
+        <div class="mb-10">
+          <p class="text-xs uppercase tracking-[4px] text-[#8B5E34]">Step 01</p>
 
-      const progress2 =
-        document.getElementById("progress2");
+          <h2 class="font-serif text-3xl font-bold mt-2">
+            When would you like to visit?
+          </h2>
 
-      const progress3 =
-        document.getElementById("progress3");
+          <p class="text-gray-500 mt-2">
+            Reservations are available Monday to Sunday.
+          </p>
+        </div>
 
-      const progress4 =
-        document.getElementById("progress4");
+        <!-- DATE -->
 
-      const confirmReservationButton =
-        document.getElementById("confirmReservationButton");
+        <div class="mb-10">
+          <label class="block font-semibold mb-4">Choose Date</label>
 
+          <div
+            id="dateOptions"
+            class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3"
+          ></div>
+        </div>
 
-      // Progress
+        <!-- TIME -->
 
-      function updateProgress(step) {
+        <div class="mb-10">
+          <label class="block font-semibold mb-4">
+            Choose 2-Hour Time Slot
+          </label>
 
-        const active =
-          "w-8 h-8 rounded-full bg-[#2C2118] text-white flex items-center justify-center";
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <button
+              type="button"
+              data-time="12:00"
+              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
+            >
+              <span class="block font-semibold">12:00 PM</span>
 
+              <span class="text-xs text-gray-400">to 2:00 PM</span>
+            </button>
 
-        const inactive =
-          "w-8 h-8 rounded-full bg-[#EDE5DC] text-gray-500 flex items-center justify-center";
+            <button
+              type="button"
+              data-time="14:00"
+              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
+            >
+              <span class="block font-semibold">2:00 PM</span>
 
+              <span class="text-xs text-gray-400">to 4:00 PM</span>
+            </button>
 
-        progress1.className =
-          step >= 1 ? active : inactive;
+            <button
+              type="button"
+              data-time="16:00"
+              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
+            >
+              <span class="block font-semibold">4:00 PM</span>
 
+              <span class="text-xs text-gray-400">to 6:00 PM</span>
+            </button>
 
-        progress2.className =
-          step >= 2 ? active : inactive;
+            <button
+              type="button"
+              data-time="18:00"
+              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
+            >
+              <span class="block font-semibold">6:00 PM</span>
 
+              <span class="text-xs text-gray-400">to 8:00 PM</span>
+            </button>
 
-        progress3.className =
-          step >= 3 ? active : inactive;
+            <button
+              type="button"
+              data-time="20:00"
+              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
+            >
+              <span class="block font-semibold">8:00 PM</span>
 
+              <span class="text-xs text-gray-400">to 10:00 PM</span>
+            </button>
+          </div>
+        </div>
 
-        progress4.className =
-          step >= 4 ? active : inactive;
+        <!-- PEOPLE -->
 
-      }
+        <div class="mb-10">
+          <label class="block font-semibold mb-4">Number of People</label>
 
+          <select
+            id="numberOfPeople"
+            class="w-full md:w-72 bg-[#FAF7F2] border border-[#DDD2C5] rounded-2xl px-5 py-4"
+          >
+            <option value="">Select party size</option>
 
+            <option value="1">1 Person</option>
 
-      // Create next 7 days
+            <option value="2">2 People</option>
 
-      function createNextSevenDays() {
+            <option value="3">3 People</option>
 
-        const today = new Date();
+            <option value="4">4 People</option>
 
+            <option value="5">5 People</option>
 
-        for (let i = 0; i < 7; i++) {
+            <option value="6">6 People</option>
 
-          const date = new Date(today);
+            <option value="7">7 People</option>
 
+            <option value="8">8 People</option>
 
-          date.setDate(
-            today.getDate() + i
-          );
+            <option value="9">9 People</option>
 
+            <option value="10">10 People</option>
+          </select>
+        </div>
 
-          const value =
-            date.getFullYear()
-            +
-            "-"
-            +
-            String(date.getMonth() + 1).padStart(2, "0")
-            +
-            "-"
-            +
-            String(date.getDate()).padStart(2, "0");
+        <div
+          id="errorMessage"
+          class="hidden bg-red-50 text-red-600 border border-red-200 rounded-2xl px-5 py-4 mb-6"
+        ></div>
 
+        <div class="flex justify-end pt-6 border-t border-[#EEE5DB]">
+          <button
+            id="findTablesButton"
+            type="button"
+            class="bg-[#2C2118] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#8B5E34]"
+          >
+            Find Available Tables →
+          </button>
+        </div>
+      </div>
+      <!-- STEP 2 TABLES -->
 
+      <div
+        id="tablesSection"
+        class="hidden max-w-4xl mx-auto mt-10 bg-white border border-[#E9DFD3] rounded-[35px] p-7 md:p-10"
+      >
+        <div class="mb-6">
+          <p class="text-xs uppercase tracking-[4px] text-[#8B5E34]">Step 02</p>
 
-          const button =
-            document.createElement("button");
+          <h2 class="font-serif text-3xl font-bold mt-2">Choose Your Table</h2>
 
+          <p class="text-gray-500 mt-2">
+            Available tables for your selected time.
+          </p>
+        </div>
 
-          button.type = "button";
+        <div
+          id="tablesGrid"
+          class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
+        ></div>
+      </div>
 
+      <!-- STEP 3 CUSTOMER -->
 
-          button.dataset.date = value;
+      <div
+        id="customerSection"
+        class="hidden max-w-4xl mx-auto mt-10 bg-white border border-[#E9DFD3] rounded-[35px] p-7 md:p-10"
+      >
+        <div class="mb-6">
+          <p class="text-xs uppercase tracking-[4px] text-[#8B5E34]">Step 03</p>
 
+          <h2 class="font-serif text-3xl font-bold mt-2">Your Information</h2>
 
-          button.className =
-            `
+          <p class="text-gray-500 mt-2">
+            Enter details to confirm reservation.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label class="block font-semibold mb-2">Name</label>
+
+            <input
+              id="customerName"
+              type="text"
+              placeholder="Enter your name"
+              class="w-full bg-[#FAF7F2] border border-[#DDD2C5] rounded-2xl px-5 py-4"
+            />
+          </div>
+
+          <div>
+            <label class="block font-semibold mb-2">Phone</label>
+
+            <input
+              id="customerPhone"
+              type="text"
+              placeholder="03xxxxxxxxx"
+              class="w-full bg-[#FAF7F2] border border-[#DDD2C5] rounded-2xl px-5 py-4"
+            />
+          </div>
+        </div>
+
+        <button
+          id="confirmReservationButton"
+          class="bg-[#8B5E34] text-white px-8 py-3 rounded-xl"
+        >
+          Confirm Reservation
+        </button>
+      </div>
+      <section
+        id="confirmationSection"
+        class="hidden bg-white rounded-3xl p-10 mt-10 shadow-xl"
+      >
+        <div id="confirmationData"></div>
+
+        <a
+          href="/my-reservations"
+          class="inline-block mt-8 bg-[#8B5E34] text-white px-8 py-3 rounded-xl"
+        >
+          View My Reservations
+        </a>
+      </section>
+
+      <script>
+        let selectedDate = "";
+        let selectedTime = "";
+        let selectedTable = null;
+
+        // Elements
+
+        const dateOptions = document.getElementById("dateOptions");
+
+        const timeButtons = document.querySelectorAll(".time-btn");
+
+        const numberOfPeople = document.getElementById("numberOfPeople");
+
+        const findTablesButton = document.getElementById("findTablesButton");
+
+        const stepOne = document.getElementById("stepOne");
+
+        const tablesSection = document.getElementById("tablesSection");
+
+        const tablesGrid = document.getElementById("tablesGrid");
+
+        const customerSection = document.getElementById("customerSection");
+
+        const customerName = document.getElementById("customerName");
+
+        const customerPhone = document.getElementById("customerPhone");
+
+        const progress1 = document.getElementById("progress1");
+
+        const progress2 = document.getElementById("progress2");
+
+        const progress3 = document.getElementById("progress3");
+
+        const progress4 = document.getElementById("progress4");
+
+        const confirmReservationButton = document.getElementById(
+          "confirmReservationButton",
+        );
+
+        // Progress
+
+        function updateProgress(step) {
+          const active =
+            "w-8 h-8 rounded-full bg-[#2C2118] text-white flex items-center justify-center";
+
+          const inactive =
+            "w-8 h-8 rounded-full bg-[#EDE5DC] text-gray-500 flex items-center justify-center";
+
+          progress1.className = step >= 1 ? active : inactive;
+
+          progress2.className = step >= 2 ? active : inactive;
+
+          progress3.className = step >= 3 ? active : inactive;
+
+          progress4.className = step >= 4 ? active : inactive;
+        }
+
+        // Create next 7 days
+
+        function createNextSevenDays() {
+          const today = new Date();
+
+          for (let i = 0; i < 7; i++) {
+            const date = new Date(today);
+
+            date.setDate(today.getDate() + i);
+
+            const value =
+              date.getFullYear() +
+              "-" +
+              String(date.getMonth() + 1).padStart(2, "0") +
+              "-" +
+              String(date.getDate()).padStart(2, "0");
+
+            const button = document.createElement("button");
+
+            button.type = "button";
+
+            button.dataset.date = value;
+
+            button.className = `
         date-btn
         bg-[#FAF7F2]
         border
@@ -383,17 +410,12 @@
         py-4
         `;
 
-
-
-          button.innerHTML = `
+            button.innerHTML = `
 
         <span class="block text-xs text-gray-400">
-        ${date.toLocaleDateString(
-            "en-US",
-            {
-              weekday: "short"
-            }
-          )}
+        ${date.toLocaleDateString("en-US", {
+          weekday: "short",
+        })}
         </span>
 
 
@@ -403,30 +425,18 @@
 
 
         <span class="block text-xs text-gray-400">
-        ${date.toLocaleDateString(
-            "en-US",
-            {
-              month: "short"
-            }
-          )}
+        ${date.toLocaleDateString("en-US", {
+          month: "short",
+        })}
         </span>
 
         `;
 
+            button.onclick = function () {
+              selectedDate = this.dataset.date;
 
-
-          button.onclick = function () {
-
-
-            selectedDate = this.dataset.date;
-
-
-            document
-              .querySelectorAll(".date-btn")
-              .forEach(btn => {
-
-                btn.className =
-                  `
+              document.querySelectorAll(".date-btn").forEach((btn) => {
+                btn.className = `
                 date-btn
                 bg-[#FAF7F2]
                 border
@@ -434,179 +444,100 @@
                 rounded-2xl
                 py-4
                 `;
-
               });
 
-
-
-            this.className =
-              `
+              this.className = `
             date-btn
             bg-[#2C2118]
             text-white
             rounded-2xl
             py-4
             `;
+            };
 
-
-          };
-
-
-          dateOptions.appendChild(button);
-
+            dateOptions.appendChild(button);
+          }
         }
 
-      }
+        // Time selection
 
+        timeButtons.forEach((button) => {
+          button.onclick = function () {
+            selectedTime = this.dataset.time;
 
-
-      // Time selection
-
-      timeButtons.forEach(button => {
-
-
-        button.onclick = function () {
-
-
-          selectedTime =
-            this.dataset.time;
-
-
-
-          timeButtons.forEach(btn => {
-
-
-            btn.className =
-              `
+            timeButtons.forEach((btn) => {
+              btn.className = `
             time-btn
             border
             border-[#DDD2C5]
             rounded-2xl
             py-4
             `;
+            });
 
-
-          });
-
-
-
-          this.className =
-            `
+            this.className = `
         time-btn
         bg-[#2C2118]
         text-white
         rounded-2xl
         py-4
         `;
+          };
+        });
 
+        // Find available tables
 
+        findTablesButton.onclick = async function () {
+          if (!selectedDate) {
+            alert("Select date");
+
+            return;
+          }
+
+          if (!selectedTime) {
+            alert("Select time");
+
+            return;
+          }
+
+          if (!numberOfPeople.value) {
+            alert("Select people");
+
+            return;
+          }
+
+          const response = await fetch(
+            `/api/availability?date=${selectedDate}&startTime=${selectedTime}&people=${numberOfPeople.value}`,
+          );
+
+          const data = await response.json();
+
+          if (data.success) {
+            showTables(data.availableTables);
+          } else {
+            alert(data.message);
+          }
         };
 
+        // Show tables
 
-      });
+        function showTables(tables) {
+          tablesGrid.innerHTML = "";
 
-
-
-
-      // Find available tables
-
-      findTablesButton.onclick = async function () {
-
-
-        if (!selectedDate) {
-
-          alert("Select date");
-
-          return;
-
-        }
-
-
-        if (!selectedTime) {
-
-          alert("Select time");
-
-          return;
-
-        }
-
-
-        if (!numberOfPeople.value) {
-
-          alert("Select people");
-
-          return;
-
-        }
-
-
-
-        const response =
-          await fetch(
-            `/api/availability?date=${selectedDate}&startTime=${selectedTime}&people=${numberOfPeople.value}`
-          );
-
-
-
-        const data =
-          await response.json();
-
-
-
-        if (data.success) {
-
-          showTables(
-            data.availableTables
-          );
-
-        }
-        else {
-
-          alert(data.message);
-
-        }
-
-
-      };
-
-
-
-
-      // Show tables
-
-      function showTables(tables) {
-
-
-        tablesGrid.innerHTML = "";
-
-
-
-        if (tables.length === 0) {
-
-          tablesGrid.innerHTML =
-            `
+          if (tables.length === 0) {
+            tablesGrid.innerHTML = `
         <p class="text-gray-500">
         No tables available for this slot.
         </p>
         `;
 
-          return;
+            return;
+          }
 
-        }
+          tables.forEach((table) => {
+            const card = document.createElement("button");
 
-
-
-
-        tables.forEach(table => {
-
-
-          const card =
-            document.createElement("button");
-
-
-
-          card.className =
-            `
+            card.className = `
         table-card
         bg-[#FAF7F2]
         border
@@ -619,9 +550,7 @@
         hover:shadow-lg
         `;
 
-
-
-          card.innerHTML = `
+            card.innerHTML = `
 
 
         <div class="text-5xl">
@@ -646,17 +575,9 @@
 
         `;
 
-
-
-          card.onclick = function () {
-
-
-            document
-              .querySelectorAll(".table-card")
-              .forEach(btn => {
-
-                btn.className =
-                  `
+            card.onclick = function () {
+              document.querySelectorAll(".table-card").forEach((btn) => {
+                btn.className = `
                 table-card
                 bg-[#FAF7F2]
                 border
@@ -668,13 +589,9 @@
                 duration-300
                 hover:shadow-lg
                 `;
-
               });
 
-
-
-            this.className =
-              `
+              this.className = `
             table-card
             bg-[#2C2118]
             text-white
@@ -686,166 +603,77 @@
             scale-105
             `;
 
+              selectedTable = table._id;
 
+              customerSection.classList.remove("hidden");
 
-            selectedTable =
-              table._id;
+              updateProgress(3);
 
+              customerSection.scrollIntoView({
+                behavior: "smooth",
+              });
+            };
 
+            tablesGrid.appendChild(card);
+          });
 
-            customerSection.classList.remove(
-              "hidden"
-            );
+          stepOne.classList.add("hidden");
 
+          tablesSection.classList.remove("hidden");
 
-            updateProgress(3);
+          updateProgress(2);
+        }
 
+        // Confirm reservation
 
-
-            customerSection.scrollIntoView({
-              behavior: "smooth"
-            });
-
-
-          };
-
-
-
-          tablesGrid.appendChild(card);
-
-
-        });
-
-
-
-        stepOne.classList.add("hidden");
-
-
-        tablesSection.classList.remove("hidden");
-
-
-        updateProgress(2);
-
-      }
-
-
-
-
-      // Confirm reservation
-
-      confirmReservationButton.onclick =
-        async function () {
-
-
-
+        confirmReservationButton.onclick = async function () {
           if (!selectedTable) {
-
             alert("Please select table");
 
             return;
-
           }
 
-
-
           const reservationData = {
-
-
             tableId: selectedTable,
-
 
             reservationDate: selectedDate,
 
-
             startTime: selectedTime,
 
+            numberOfPeople: Number(numberOfPeople.value),
 
-            numberOfPeople:
-              Number(numberOfPeople.value),
+            customerName: customerName.value,
 
-
-            customerName:
-              customerName.value,
-
-
-            phone:
-              customerPhone.value
-
-
+            phone: customerPhone.value,
           };
 
+          const response = await fetch("/reservations", {
+            method: "POST",
 
+            headers: {
+              "Content-Type": "application/json",
+            },
 
-          const response =
-            await fetch(
-              "/reservations",
-              {
+            body: JSON.stringify(reservationData),
+          });
 
-                method: "POST",
-
-
-                headers: {
-
-                  "Content-Type":
-                    "application/json"
-
-                },
-
-
-                body:
-                  JSON.stringify(
-                    reservationData
-                  )
-
-              }
-            );
-
-
-
-          const data =
-            await response.json();
-
-
+          const data = await response.json();
 
           if (data.success) {
-
-
-            alert(
-              "Reservation Created Successfully"
-            );
-
+            alert("Reservation Created Successfully");
 
             updateProgress(4);
 
-
-
-            window.location.href =
-              "/my-reservations";
-
-
-          }
-          else {
-
-
+            window.location.href = "/my-reservations";
+          } else {
             alert(data.message);
-
-
           }
-
-
         };
 
+        // Start
 
-
-      // Start
-
-      createNextSevenDays();
-
-    </script>
-
-
-
-  </main>
-</body>
-
+        createNextSevenDays();
+      </script>
+    </main>
+  </body>
 </html>
