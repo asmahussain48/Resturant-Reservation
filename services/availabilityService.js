@@ -5,16 +5,21 @@ const { getRestaurantSettings } = require("./settingsService");
 function generateTimeSlots(openingTime, closingTime, duration) {
   const slots = [];
 
-  let currentHour = Number(openingTime.split(":")[0]);
+  const [openingHour, openingMinute] = openingTime.split(":").map(Number);
+  const [closingHour, closingMinute] = closingTime.split(":").map(Number);
+  let currentMinutes = openingHour * 60 + openingMinute;
+  const closingMinutes = closingHour * 60 + closingMinute;
+  const durationMinutes = Number(duration) * 60;
 
-  const closingHour = Number(closingTime.split(":")[0]);
+  while (currentMinutes + durationMinutes <= closingMinutes) {
+    const hour = Math.floor(currentMinutes / 60);
+    const minute = currentMinutes % 60;
 
-  while (currentHour + duration <= closingHour) {
-    const formattedTime = `${currentHour.toString().padStart(2, "0")}:00`;
+    slots.push(
+      `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
+    );
 
-    slots.push(formattedTime);
-
-    currentHour += duration;
+    currentMinutes += durationMinutes;
   }
 
   return slots;
@@ -79,4 +84,6 @@ module.exports = {
   getAvailableTables,
 
   getAvailableSlots,
+
+  generateTimeSlots,
 };

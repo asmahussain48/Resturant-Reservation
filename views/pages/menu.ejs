@@ -9,6 +9,7 @@
     <title>Our Menu | Royal Taste</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/theme.css">
 </head>
 
 
@@ -175,10 +176,10 @@
             function getFoodEmoji(item) {
 
                 const name =
-                    item.name.toLowerCase();
+                    String(item.name || "").toLowerCase();
 
                 const category =
-                    item.category.toLowerCase();
+                    String(item.category || "").toLowerCase();
 
 
                 if (
@@ -429,21 +430,21 @@
             <p
               class="text-[10px] uppercase tracking-[3px] text-[#8B5E34] font-semibold"
             >
-              ${item.category}
+              ${item.category || "Other"}
             </p>
 
 
             <h2
               class="font-serif text-2xl font-bold mt-2"
             >
-              ${item.name}
+              ${item.name || "Unnamed menu item"}
             </h2>
 
 
             <p
               class="text-sm text-gray-500 leading-relaxed mt-3 min-h-[42px]"
             >
-              ${item.description}
+              ${item.description || "No description available."}
             </p>
 
 
@@ -541,7 +542,7 @@
 
 
                     errorMessage.textContent =
-                        "Unable to connect to the server.";
+                        "Unable to display the menu. Please refresh the page.";
 
                     errorMessage.classList.remove("hidden");
 

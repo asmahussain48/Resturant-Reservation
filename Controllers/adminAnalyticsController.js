@@ -2,384 +2,176 @@ const Reservation = require("../models/Reservation");
 const RestaurantTable = require("../models/RestaurantTable");
 const User = require("../models/User");
 
-// DASHBOARD OVERVIEW
+function toDateKey(date) {
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+}
 
 async function getDashboard(req, res) {
   try {
-    const today = new Date().toISOString().split("T")[0];
+    const today = toDateKey(new Date());
+    const activeStatuses = ["pending", "confirmed"];
 
-    // Today's reservations
-
-    const todayReservations = await Reservation.countDocuments({
-      reservationDate: today,
-
-      status: {
-        $in: ["pending", "confirmed"],
-      },
-    });
-
-    // Upcoming reservations
-
-    const upcomingReservations = await Reservation.countDocuments({
-      reservationDate: {
-        $gte: today,
-      },
-
-      status: {
-        $in: ["pending", "confirmed"],
-      },
-    });
-
-    // Total active tables
-
-    const availableTables = await RestaurantTable.countDocuments({
-      isActive: true,
-    });
-
-    // Occupied tables today
-
-    const occupiedTables = await Reservation.countDocuments({
-      reservationDate: today,
-
-      status: {
-        $in: ["pending", "confirmed"],
-      },
-    });
-
-    // Today's guests
-
-    const guests = await Reservation.aggregate([
-      {
-        $match: {
-          reservationDate: today,
-
-          status: {
-            $in: ["pending", "confirmed"],
-          },
-        },
-      },
-
-      {
-        $group: {
-          _id: null,
-
-          total: {
-            $sum: "$numberOfPeople",
-          },
-        },
-      },
+    const [
+      todayReservations,
+      upcomingReservations,
+      totalActiveTables,
+      occupiedTableIds,
+      guestTotals,
+      cancelledReservations,
+    ] = await Promise.all([
+      Reservation.countDocuments({
+        reservationDate: today,
+        status: { $in: activeStatuses },
+      }),
+      Reservation.countDocuments({
+        reservationDate: { $gte: today },
+        status: { $in: activeStatuses },
+      }),
+      RestaurantTable.countDocuments({ isActive: true }),
+      Reservation.distinct("table", {
+        reservationDate: today,
+        status: { $in: activeStatuses },
+      }),
+      Reservation.aggregate([
+        { $match: { reservationDate: today, status: { $in: activeStatuses } } },
+        { $group: { _id: null, total: { $sum: "$numberOfPeople" } } },
+      ]),
+      Reservation.countDocuments({ status: "cancelled" }),
     ]);
 
-    const todayGuests = guests.length ? guests[0].total : 0;
-
-    // Cancelled reservations
-
-    const cancelledReservations = await Reservation.countDocuments({
-      status: "cancelled",
-    });
+    const occupiedTables = occupiedTableIds.length;
 
     res.json({
       success: true,
-
       data: {
         todayReservations,
-
         upcomingReservations,
-
-        availableTables,
-
+        availableTables: Math.max(0, totalActiveTables - occupiedTables),
         occupiedTables,
-
-        todayGuests,
-
+        todayGuests: guestTotals[0]?.total || 0,
         cancelledReservations,
       },
     });
   } catch (error) {
     console.log(error);
-
-    res.status(500).json({
-      success: false,
-
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 }
 
+async function getWeeklyReservations(req, res) {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - 6);
+    const start = toDateKey(startDate);
+    const end = toDateKey(today);
 
-// RESERVATIONS PER WEEK
+    const grouped = await Reservation.aggregate([
+      {
+        $match: {
+          reservationDate: { $gte: start, $lte: end },
+          status: { $in: ["pending", "confirmed"] },
+        },
+      },
+      { $group: { _id: "$reservationDate", reservations: { $sum: 1 } } },
+    ]);
 
-async function getWeeklyReservations(req,res){
+    const counts = new Map(grouped.map((item) => [item._id, item.reservations]));
+    const data = [];
 
-    try{
-
-
-        const reservations =
-        await Reservation.aggregate([
-
-            {
-                $group:{
-                    _id:"$reservationDate",
-                    reservations:{
-                        $sum:1
-                    }
-                }
-            },
-
-            {
-                $sort:{
-                    _id:1
-                }
-            }
-
-        ]);
-
-
-
-        res.json({
-
-            success:true,
-
-            data:reservations
-
-        });
-
-
-
-    }
-    catch(error){
-
-        console.log(error);
-
-
-        res.status(500).json({
-
-            success:false,
-
-            message:error.message
-
-        });
-
+    for (let index = 0; index < 7; index++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + index);
+      const key = toDateKey(date);
+      data.push({ date: key, reservations: counts.get(key) || 0 });
     }
 
+    res.json({ success: true, data, range: { start, end } });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 }
 
-// PEAK HOURS
+async function getPeakHours(req, res) {
+  try {
+    const data = await Reservation.aggregate([
+      { $match: { status: { $in: ["pending", "confirmed"] } } },
+      { $group: { _id: "$startTime", count: { $sum: 1 } } },
+      { $sort: { _id: 1 } },
+    ]);
 
-async function getPeakHours(req,res){
-
-    try{
-
-
-        const data =
-        await Reservation.aggregate([
-
-
-            {
-                $group:{
-
-                    _id:"$startTime",
-
-                    count:{
-                        $sum:1
-                    }
-
-                }
-
-            },
-
-
-            {
-                $sort:{
-                    count:-1
-                }
-            }
-
-
-        ]);
-
-
-
-        res.json({
-
-            success:true,
-
-            data
-
-        });
-
-
-
-    }
-    catch(error){
-
-
-        console.log(error);
-
-
-        res.status(500).json({
-
-            success:false,
-
-            message:error.message
-
-        });
-
-
-    }
-
+    res.json({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 }
 
-// TABLE USAGE
+async function getTableUtilization(req, res) {
+  try {
+    const data = await Reservation.aggregate([
+      { $match: { status: { $in: ["pending", "confirmed"] } } },
+      { $group: { _id: "$table", usage: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: "restauranttables",
+          localField: "_id",
+          foreignField: "_id",
+          as: "table",
+        },
+      },
+      { $unwind: "$table" },
+      { $sort: { usage: -1 } },
+      { $limit: 8 },
+      {
+        $project: {
+          _id: 0,
+          tableNumber: "$table.tableNumber",
+          capacity: "$table.capacity",
+          location: "$table.location",
+          usage: 1,
+        },
+      },
+    ]);
 
-async function getTableUtilization(req,res){
-
-    try{
-
-
-        const data =
-        await Reservation.aggregate([
-
-
-            {
-                $group:{
-
-                    _id:"$table",
-
-                    usage:{
-                        $sum:1
-                    }
-
-                }
-
-            },
-
-
-            {
-                $lookup:{
-
-                    from:"restauranttables",
-
-                    localField:"_id",
-
-                    foreignField:"_id",
-
-                    as:"table"
-
-                }
-
-            }
-
-
-        ]);
-
-
-
-        res.json({
-
-            success:true,
-
-            data
-
-        });
-
-
-
-    }
-    catch(error){
-
-
-        console.log(error);
-
-
-        res.status(500).json({
-
-            success:false,
-
-            message:error.message
-
-        });
-
-
-    }
-
+    res.json({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 }
 
-// CUSTOMER GROWTH
+async function getCustomerGrowth(req, res) {
+  try {
+    const data = await User.aggregate([
+      { $match: { role: "user" } },
+      {
+        $group: {
+          _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } },
+          customers: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1 } },
+      { $limit: 12 },
+    ]);
 
-async function getCustomerGrowth(req,res){
-
-    try{
-
-
-        const data =
-        await User.aggregate([
-
-
-            {
-
-                $group:{
-
-                    _id:{
-                        month:{
-                            $month:"$createdAt"
-                        }
-                    },
-
-
-                    customers:{
-                        $sum:1
-                    }
-
-
-                }
-
-
-            }
-
-
-        ]);
-
-
-
-        res.json({
-
-            success:true,
-
-            data
-
-        });
-
-
-
-    }
-    catch(error){
-
-
-        console.log(error);
-
-
-        res.status(500).json({
-
-            success:false,
-
-            message:error.message
-
-        });
-
-
-    }
-
+    res.json({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 }
 
 module.exports = {
   getDashboard,
-
   getWeeklyReservations,
-
   getPeakHours,
-
   getTableUtilization,
-
   getCustomerGrowth,
 };

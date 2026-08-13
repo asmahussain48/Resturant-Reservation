@@ -2,370 +2,204 @@
 <html lang="en">
 
 <head>
-    <title>Admin Menu | Royal Taste</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Management | Royal Taste</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="stylesheet" href="/css/theme.css">
 </head>
 
-
 <body class="bg-[#F8F4EE] text-[#211A15]">
+    <div class="min-h-screen flex">
+        <aside class="hidden lg:flex w-64 bg-[#2C2118] text-white p-8 flex-col fixed inset-y-0">
+            <div>
+                <h1 class="text-3xl font-serif font-bold text-[#D6A36A]">Royal Taste</h1>
+                <p class="text-sm text-stone-400 mt-2">ADMIN PANEL</p>
+            </div>
 
+            <nav class="mt-12 space-y-2">
+                <a href="/admin/dashboard-page" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Dashboard</a>
+                <a href="/admin/reservations" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Reservations</a>
+                <a href="/admin/tables" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Tables</a>
+                <a href="/admin/menu" class="block px-4 py-3 rounded-xl bg-[#8B5E34]">Menu</a>
+                <a href="/admin/settings" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Settings</a>
+            </nav>
 
-    <section class="px-8 py-12">
+            <p class="mt-auto text-xs leading-5 text-stone-400">Keep your restaurant menu accurate and available for guests.</p>
+        </aside>
 
-
-        <div class="max-w-6xl mx-auto">
-
-
-            <h1 class="text-5xl font-serif font-bold">
-                Menu Management
-            </h1>
-
-
-            <p class="text-gray-500 mt-2">
-                Manage restaurant food items
-            </p>
-
-
-
-            <!-- ADD MENU -->
-
-
-            <div class="bg-white rounded-3xl p-8 mt-10 border">
-
-
-                <h2 class="text-2xl font-bold mb-6">
-                    Add New Item
-                </h2>
-
-
-
-                <div class="grid md:grid-cols-4 gap-4">
-
-
-                    <input id="name" placeholder="Name" class="border p-3 rounded-xl" />
-
-
-
-                    <input id="description" placeholder="Description" class="border p-3 rounded-xl" />
-
-
-
-                    <input id="category" placeholder="Category" class="border p-3 rounded-xl" />
-
-
-
-                    <input id="price" placeholder="Price" class="border p-3 rounded-xl" />
-
-
-
+        <main class="flex-1 lg:ml-64 px-5 py-8 md:p-10 xl:p-12">
+            <header class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[4px] text-[#8B5E34]">Restaurant Management</p>
+                    <h1 class="font-serif text-4xl md:text-5xl font-bold mt-2">Menu Management</h1>
+                    <p class="text-gray-500 mt-2">Add dishes, update details, and control availability.</p>
                 </div>
 
-
-
-                <button onclick="addItem()" class="mt-5 bg-[#8B5E34] text-white px-8 py-3 rounded-full">
-                    Save
+                <button id="openAddModalButton" type="button"
+                    class="bg-[#8B5E34] text-white px-6 py-3 rounded-full font-medium hover:bg-[#6F451F] transition shadow-lg shadow-[#8B5E34]/20">
+                    + Add Menu Item
                 </button>
+            </header>
 
+            <section class="grid grid-cols-2 xl:grid-cols-4 gap-4 mt-9">
+                <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                    <p class="text-sm text-gray-500">Total Items</p>
+                    <p id="totalItems" class="text-3xl font-bold mt-2">0</p>
+                </div>
+                <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                    <p class="text-sm text-gray-500">Available</p>
+                    <p id="availableItems" class="text-3xl font-bold text-green-700 mt-2">0</p>
+                </div>
+                <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                    <p class="text-sm text-gray-500">Unavailable</p>
+                    <p id="unavailableItems" class="text-3xl font-bold text-red-600 mt-2">0</p>
+                </div>
+                <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                    <p class="text-sm text-gray-500">Categories</p>
+                    <p id="categoryCount" class="text-3xl font-bold text-[#8B5E34] mt-2">0</p>
+                </div>
+            </section>
 
+            <section class="bg-white border border-[#ECE3D8] rounded-2xl p-4 mt-8 flex flex-col md:flex-row gap-3">
+                <label class="relative flex-1">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">⌕</span>
+                    <input id="searchInput" type="search" placeholder="Search by item name or description"
+                        class="w-full border border-[#DED3C6] pl-11 pr-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]">
+                </label>
+
+                <select id="categoryFilter"
+                    class="border border-[#DED3C6] bg-white px-4 py-3 rounded-xl outline-none focus:border-[#8B5E34]">
+                    <option value="All">All categories</option>
+                </select>
+
+                <select id="statusFilter"
+                    class="border border-[#DED3C6] bg-white px-4 py-3 rounded-xl outline-none focus:border-[#8B5E34]">
+                    <option value="All">All statuses</option>
+                    <option value="Available">Available</option>
+                    <option value="Unavailable">Unavailable</option>
+                </select>
+            </section>
+
+            <div class="flex items-center justify-between mt-10 mb-5">
+                <div>
+                    <h2 class="font-serif text-3xl font-bold">Menu Items</h2>
+                    <p id="resultCount" class="text-sm text-gray-500 mt-1">Loading menu...</p>
+                </div>
             </div>
 
-
-
-
-
-            <!-- MENU LIST -->
-
-
-            <div id="menuContainer" class="grid md:grid-cols-3 gap-6 mt-10">
+            <div id="loadingMenu" class="bg-white border border-[#ECE3D8] rounded-3xl p-12 text-center text-gray-500">
+                Loading menu items...
             </div>
 
+            <div id="menuContainer" class="hidden grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
 
+            <div id="emptyMenu" class="hidden bg-white border border-dashed border-[#D9C9B7] rounded-3xl p-12 text-center">
+                <div class="text-5xl">🍽️</div>
+                <h3 class="text-xl font-bold mt-4">No menu items found</h3>
+                <p class="text-gray-500 mt-2">Add a new item or adjust your search filters.</p>
+            </div>
+        </main>
+    </div>
 
+    <!-- Add and Edit Modal -->
+    <div id="itemModal" class="hidden fixed inset-0 z-[100] overflow-y-auto" role="dialog" aria-modal="true">
+        <div id="modalBackdrop" class="fixed inset-0 bg-[#211A15]/60 backdrop-blur-sm"></div>
+
+        <div class="relative min-h-full flex items-center justify-center p-4 md:p-8">
+            <section class="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden">
+                <div class="border-b border-[#ECE3D8] px-6 py-5 md:px-8 flex items-start justify-between gap-5">
+                    <div>
+                        <p id="modalLabel" class="text-xs font-semibold uppercase tracking-[3px] text-[#8B5E34]">New Menu Item</p>
+                        <h2 id="modalTitle" class="font-serif text-3xl font-bold mt-1">Add Menu Item</h2>
+                    </div>
+                    <button id="closeModalButton" type="button" aria-label="Close modal"
+                        class="w-10 h-10 rounded-full bg-[#F8F4EE] text-xl hover:bg-[#EFE5D8] transition">&times;</button>
+                </div>
+
+                <form id="itemForm" class="p-6 md:p-8">
+                    <input id="itemId" type="hidden">
+
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <label class="block md:col-span-2">
+                            <span class="block text-sm font-semibold mb-2">Item Name</span>
+                            <input id="itemName" type="text" placeholder="e.g. Chicken Alfredo Pasta"
+                                class="w-full border border-[#DED3C6] p-4 rounded-xl outline-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]">
+                        </label>
+
+                        <label class="block md:col-span-2">
+                            <span class="block text-sm font-semibold mb-2">Description</span>
+                            <textarea id="itemDescription" rows="3" placeholder="Describe the dish for your guests"
+                                class="w-full border border-[#DED3C6] p-4 rounded-xl outline-none resize-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]"></textarea>
+                        </label>
+
+                        <label class="block">
+                            <span class="block text-sm font-semibold mb-2">Category</span>
+                            <select id="itemCategory"
+                                class="w-full border border-[#DED3C6] bg-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]">
+                                <option value="">Select category</option>
+                                <option value="BBQ">BBQ</option>
+                                <option value="Dessert">Dessert</option>
+                                <option value="Drinks">Drinks</option>
+                                <option value="Fast Food">Fast Food</option>
+                                <option value="Main Course">Main Course</option>
+                                <option value="Pakistani">Pakistani</option>
+                                <option value="Pizza">Pizza</option>
+                                <option value="Rice">Rice</option>
+                                <option value="Salad">Salad</option>
+                                <option value="Sandwich">Sandwich</option>
+                                <option value="Sides">Sides</option>
+                                <option value="Starter">Starter</option>
+                            </select>
+                        </label>
+
+                        <label class="block">
+                            <span class="block text-sm font-semibold mb-2">Price (Rs)</span>
+                            <input id="itemPrice" type="number" min="0" step="1" placeholder="0"
+                                class="w-full border border-[#DED3C6] p-4 rounded-xl outline-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]">
+                        </label>
+                    </div>
+
+                    <label class="flex items-center justify-between gap-4 bg-[#F8F4EE] rounded-2xl p-4 mt-5 cursor-pointer">
+                        <div>
+                            <span class="block font-semibold">Available for ordering</span>
+                            <span class="block text-sm text-gray-500 mt-1">Guests can see this item on the menu.</span>
+                        </div>
+                        <input id="itemAvailable" type="checkbox" checked class="w-5 h-5 accent-[#8B5E34]">
+                    </label>
+
+                    <p id="formError" class="hidden text-sm text-red-600 mt-4"></p>
+
+                    <div class="flex flex-wrap justify-end gap-3 mt-7">
+                        <button id="cancelModalButton" type="button"
+                            class="border border-[#DED3C6] px-7 py-3 rounded-full font-medium hover:bg-[#F8F4EE] transition">Cancel</button>
+                        <button id="saveItemButton" type="submit"
+                            class="bg-[#2C2118] text-white px-7 py-3 rounded-full font-medium hover:bg-[#493426] disabled:opacity-60 transition">Save Item</button>
+                    </div>
+                </form>
+            </section>
         </div>
-
-    </section>
-
-
-
-    <script>
-
-
-        async function loadMenu() {
-
-
-            const response =
-                await fetch("/admin/api/menu");
-
-
-            const data =
-                await response.json();
-
-
-
-            const container =
-                document.getElementById("menuContainer");
-
-
-            container.innerHTML = "";
-
-
-
-            data.menu.forEach(item => {
-
-
-                container.innerHTML += `
-
-
-<div class="bg-white rounded-3xl p-6 border">
-
-
-<h2 class="text-2xl font-bold">
-${item.name}
-</h2>
-
-
-<p class="text-gray-500 mt-2">
-${item.description}
-</p>
-
-
-<p class="mt-3">
-Category:
-${item.category}
-</p>
-
-
-<p class="font-bold mt-2">
-Rs ${item.price}
-</p>
-
-
-
-<p class="mt-2 ${item.available
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }">
-${item.available ? "Available" : "Not Available"}
-</p>
-
-
-
-<div class="flex gap-3 mt-5">
-
-
-<button
-
-onclick="toggleStatus('${item._id}', ${item.available})"
-
-class="px-5 py-2 rounded-full bg-[#8B5E34] text-white"
-
->
-
-${item.available ? "Disable" : "Enable"}
-
-</button>
-
-
-
-<button
-
-onclick="deleteItem('${item._id}')"
-
-class="px-5 py-2 rounded-full bg-red-600 text-white"
-
->
-Delete
-</button>
-
-<button
-
-onclick="editItem('${item._id}')"
-
-class="px-5 py-2 rounded-full border"
-
->
-Edit
-</button>
-
-</div>
-
-
-</div>
-
-
-`;
-
-
-
-            });
-
-
-
-        }
-
-
-
-
-
-        async function addItem() {
-
-
-            const item = {
-
-
-                name:
-                    document.getElementById("name").value,
-
-
-                description:
-                    document.getElementById("description").value,
-
-
-                category:
-                    document.getElementById("category").value,
-
-
-                price:
-                    Number(document.getElementById("price").value)
-
-
-
-            };
-
-
-
-            const response =
-            await fetch("/admin/api/menu", {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify(item)
-
-
-                });
-
-
-
-            const data =
-                await response.json();
-
-
-
-            alert(data.message);
-
-
-
-            loadMenu();
-
-
-        }
-
-
-
-
-
-        async function deleteItem(id) {
-
-
-            if (!confirm("Delete this item?"))
-                return;
-
-
-
-                await fetch(`/admin/api/menu/${id}`, {
-
-
-                method: "DELETE"
-
-
-            });
-
-
-
-            loadMenu();
-
-
-        }
-        
-        async function toggleStatus(id, currentStatus) {
-
-            await fetch(`/admin/api/menu/${id}/status`, {
-
-
-                    method: "PATCH",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        available: !currentStatus
-
-                    })
-
-
-                });
-
-
-
-                loadMenu();
-
-
-            }
-
-
-                async function editItem(id) {
-
-
-                    const name =
-                        prompt("Enter new name");
-
-
-                    const price =
-                        prompt("Enter new price");
-
-
-
-                        await fetch(`/admin/api/menu/${id}`, {
-                        method: "PUT",
-
-                        headers: {
-
-                            "Content-Type": "application/json"
-
-                        },
-
-                        body: JSON.stringify({
-
-                            name,
-
-                            price: Number(price)
-
-                        })
-
-
-                    });
-
-
-                    loadMenu();
-
-
-                }
-
-        loadMenu();
-
-
-
-    </script>
-
-
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="hidden fixed inset-0 z-[110]">
+        <div class="absolute inset-0 bg-[#211A15]/60 backdrop-blur-sm"></div>
+        <div class="relative min-h-full flex items-center justify-center p-4">
+            <section class="bg-white w-full max-w-md rounded-3xl p-7 shadow-2xl text-center">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center text-2xl mx-auto">!</div>
+                <h2 class="font-serif text-3xl font-bold mt-4">Delete Menu Item?</h2>
+                <p class="text-gray-500 mt-2">This will permanently remove <strong id="deleteItemName" class="text-[#211A15]"></strong> from the menu.</p>
+                <div class="flex justify-center gap-3 mt-7">
+                    <button id="cancelDeleteButton" type="button" class="border border-[#DED3C6] px-6 py-3 rounded-full font-medium">Cancel</button>
+                    <button id="confirmDeleteButton" type="button" class="bg-red-600 text-white px-6 py-3 rounded-full font-medium hover:bg-red-700">Delete Item</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div id="toast" class="hidden fixed right-5 bottom-5 z-[120] text-white px-5 py-4 rounded-2xl shadow-2xl"></div>
+
+    <script src="/js/adminMenu.js"></script>
 </body>
 
 </html>

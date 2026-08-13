@@ -2,9 +2,17 @@ const Reservation = require("../models/Reservation");
 const RestaurantTable = require("../models/RestaurantTable");
 const User = require("../models/User");
 
+function toDateKey(date) {
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+}
+
 async function getDashboard(req, res) {
   try {
-    const today = new Date().toISOString().split("T")[0];
+    const today = toDateKey(new Date());
 
     const todayReservations = await Reservation.countDocuments({
       reservationDate: today,

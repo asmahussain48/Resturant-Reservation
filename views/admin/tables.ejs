@@ -2,125 +2,140 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>
-        Admin Tables | Royal Taste
-    </title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Management | Royal Taste</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="stylesheet" href="/css/theme.css">
 </head>
 
-
 <body class="bg-[#F8F4EE] text-[#211A15]">
-
-
-    <div class="p-10">
-
-
-        <div class="flex justify-between items-center">
-
-
+    <div class="min-h-screen flex">
+        <aside class="hidden lg:flex w-64 bg-[#2C2118] text-white p-8 flex-col fixed inset-y-0">
             <div>
-
-                <h1 class="text-5xl font-serif font-bold">
-                    Tables
-                </h1>
-
-                <p class="text-gray-500 mt-2">
-                    Manage restaurant seating
-                </p>
-
+                <h1 class="text-3xl font-serif font-bold text-[#D6A36A]">Royal Taste</h1>
+                <p class="text-sm text-stone-400 mt-2">ADMIN PANEL</p>
             </div>
 
+            <nav class="mt-12 space-y-2">
+                <a href="/admin/dashboard-page" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Dashboard</a>
+                <a href="/admin/reservations" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Reservations</a>
+                <a href="/admin/tables" class="block px-4 py-3 rounded-xl bg-[#8B5E34]">Tables</a>
+                <a href="/admin/menu" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Menu</a>
+                <a href="/admin/settings" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Settings</a>
+            </nav>
 
-            <button onclick="showForm()" class="
-bg-[#8B5E34]
-text-white
-px-6
-py-3
-rounded-full
-">
+            <p class="mt-auto text-xs leading-5 text-stone-400">Manage seating availability and dining areas.</p>
+        </aside>
 
-                + Add Table
+        <main class="flex-1 lg:ml-64 px-5 py-8 md:p-10 xl:p-12">
+            <header class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[4px] text-[#8B5E34]">Seating Management</p>
+                    <h1 class="font-serif text-4xl md:text-5xl font-bold mt-2">Restaurant Tables</h1>
+                    <p class="text-gray-500 mt-2">Create tables and manage their availability.</p>
+                </div>
 
-            </button>
+                <button id="addTableButton" type="button"
+                    class="bg-[#8B5E34] text-white px-6 py-3 rounded-full font-medium hover:bg-[#6F451F] transition shadow-lg shadow-[#8B5E34]/20">
+                    + Add New Table
+                </button>
+            </header>
 
+            <section class="grid grid-cols-2 xl:grid-cols-4 gap-4 mt-9">
+                <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                    <p class="text-sm text-gray-500">Total Tables</p>
+                    <p id="totalTables" class="text-3xl font-bold mt-2">0</p>
+                </div>
+                <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                    <p class="text-sm text-gray-500">Active</p>
+                    <p id="activeTables" class="text-3xl font-bold text-green-700 mt-2">0</p>
+                </div>
+                <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                    <p class="text-sm text-gray-500">Inactive</p>
+                    <p id="inactiveTables" class="text-3xl font-bold text-red-600 mt-2">0</p>
+                </div>
+                <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                    <p class="text-sm text-gray-500">Total Seats</p>
+                    <p id="totalSeats" class="text-3xl font-bold text-[#8B5E34] mt-2">0</p>
+                </div>
+            </section>
 
-        </div>
+            <section id="tableForm" class="hidden bg-white border border-[#E7DBCD] rounded-3xl p-6 md:p-8 mt-8 shadow-xl shadow-stone-900/5">
+                <div class="flex items-start justify-between gap-5">
+                    <div>
+                        <h2 class="font-serif text-3xl font-bold">Add a New Table</h2>
+                        <p class="text-gray-500 mt-1">The next table number will be assigned automatically.</p>
+                    </div>
+                    <button id="closeFormButton" type="button" aria-label="Close form"
+                        class="w-10 h-10 rounded-full bg-[#F8F4EE] text-xl hover:bg-[#EFE5D8] transition">&times;</button>
+                </div>
 
+                <div class="grid md:grid-cols-2 gap-5 mt-7">
+                    <label class="block">
+                        <span class="block text-sm font-semibold mb-2">Seating Capacity</span>
+                        <select id="capacity" class="w-full border border-[#DED3C6] bg-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]">
+                            <option value="">Select capacity</option>
+                            <option value="2">2 guests</option>
+                            <option value="4">4 guests</option>
+                            <option value="6">6 guests</option>
+                            <option value="8">8 guests</option>
+                            <option value="10">10 guests</option>
+                            <option value="12">12 guests</option>
+                        </select>
+                    </label>
 
+                    <label class="block">
+                        <span class="block text-sm font-semibold mb-2">Dining Area</span>
+                        <select id="location" class="w-full border border-[#DED3C6] bg-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]">
+                            <option value="">Select location</option>
+                            <option value="Main Dining Area">Main Dining Area</option>
+                            <option value="Window Area">Window Area</option>
+                            <option value="Garden Area">Garden Area</option>
+                            <option value="Private Dining">Private Dining</option>
+                            <option value="Rooftop">Rooftop</option>
+                        </select>
+                    </label>
+                </div>
 
+                <p id="formError" class="hidden text-sm text-red-600 mt-4"></p>
 
-        <!-- Add Table Form -->
+                <div class="flex flex-wrap gap-3 mt-7">
+                    <button id="saveTableButton" type="button"
+                        class="bg-[#2C2118] text-white px-7 py-3 rounded-full font-medium hover:bg-[#493426] disabled:opacity-60 transition">
+                        Save Table
+                    </button>
+                    <button id="cancelButton" type="button"
+                        class="border border-[#DED3C6] px-7 py-3 rounded-full font-medium hover:bg-[#F8F4EE] transition">
+                        Cancel
+                    </button>
+                </div>
+            </section>
 
-
-        <div id="tableForm" class="hidden bg-white rounded-3xl p-8 mt-8 shadow">
-
-            <h2 class="text-2xl font-bold mb-5">
-                Add New Table
-            </h2>
-
-
-
-            <div class="grid md:grid-cols-3 gap-4">
-
-
-                <input id="tableNumber" placeholder="Table Number" class="border p-3 rounded-xl" />
-
-
-
-                <input id="capacity" placeholder="Capacity" class="border p-3 rounded-xl" />
-
-
-
-                <input id="location" placeholder="Location" class="border p-3 rounded-xl" />
-
-
+            <div class="flex items-center justify-between mt-10 mb-5">
+                <div>
+                    <h2 class="font-serif text-3xl font-bold">Floor Overview</h2>
+                    <p class="text-sm text-gray-500 mt-1">All restaurant tables in one place</p>
+                </div>
             </div>
 
+            <div id="loadingTables" class="bg-white border border-[#ECE3D8] rounded-3xl p-12 text-center text-gray-500">
+                Loading tables...
+            </div>
 
+            <div id="tablesContainer" class="hidden grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
 
-            <button onclick="addTable()" class="
-mt-5
-bg-[#2C2118]
-text-white
-px-6
-py-3
-rounded-full
-">
-
-                Save
-
-            </button>
-
-
-        </div>
-
-
-
-
-
-        <div id="tablesContainer" class="
-grid
-md:grid-cols-3
-gap-6
-mt-10
-">
-
-        </div>
-
-
-
+            <div id="emptyTables" class="hidden bg-white border border-dashed border-[#D9C9B7] rounded-3xl p-12 text-center">
+                <div class="text-5xl">🍽️</div>
+                <h3 class="text-xl font-bold mt-4">No tables added yet</h3>
+                <p class="text-gray-500 mt-2">Add the first table to begin managing your seating.</p>
+            </div>
+        </main>
     </div>
 
-
+    <div id="toast" class="hidden fixed right-5 bottom-5 z-50 text-white px-5 py-4 rounded-2xl shadow-2xl"></div>
 
     <script src="/js/adminTables.js"></script>
-
-
 </body>
 
 </html>

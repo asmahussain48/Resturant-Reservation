@@ -28,7 +28,20 @@ async function getAllTables(req, res) {
 
 async function createTable(req, res) {
   try {
-    const { tableNumber, capacity, location } = req.body;
+    const { capacity, location } = req.body;
+
+    if (!capacity || !location) {
+      return res.status(400).json({
+        success: false,
+        message: "Capacity and location are required",
+      });
+    }
+
+    const lastTable = await RestaurantTable.findOne().sort({
+      tableNumber: -1,
+    });
+
+    const tableNumber = lastTable ? lastTable.tableNumber + 1 : 1;
 
     const table = await RestaurantTable.create({
       tableNumber,
@@ -52,7 +65,7 @@ async function createTable(req, res) {
       return res.status(400).json({
         success: false,
 
-        message: "Table number already exists",
+        message: "Could not generate a table number. Please try again.",
       });
     }
 

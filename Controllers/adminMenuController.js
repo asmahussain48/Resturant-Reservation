@@ -30,67 +30,65 @@ async function getMenu(req, res) {
 
 async function createMenuItem(req, res) {
   try {
+    const { name, description, category, price, isAvailable } = req.body;
 
-    const {
-      name,
-      description,
-      category,
-      price
-    } = req.body;
-
+    if (!name || !description || !category || price === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, description, category and price are required",
+      });
+    }
 
     const item = await Menu.create({
-
       name,
-
       description,
-
       category,
-
       price,
-
+      isAvailable,
     });
-
 
     res.status(201).json({
-
       success: true,
-
       message: "Menu item created",
-
       item,
-
     });
-
-
   } catch (error) {
-
     console.log(error);
 
-
-    res.status(500).json({
-
+    res.status(400).json({
       success: false,
-
       message: error.message,
-
     });
-
   }
 }
 // UPDATE MENU ITEM
 
 async function updateMenuItem(req, res) {
   try {
+    const { name, description, category, price, isAvailable } = req.body;
+
+    if (!name || !description || !category || price === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Name, description, category and price are required",
+      });
+    }
+
     const item = await Menu.findByIdAndUpdate(
       req.params.id,
-
-      req.body,
-
+      { name, description, category, price, isAvailable },
       {
         new: true,
+        runValidators: true,
       },
     );
+
+    if (!item) {
+      return res.status(404).json({
+        success: false,
+        message: "Menu item not found",
+      });
+    }
 
     res.json({
       success: true,
@@ -114,7 +112,14 @@ async function updateMenuItem(req, res) {
 
 async function deleteMenuItem(req, res) {
   try {
-    await Menu.findByIdAndDelete(req.params.id);
+    const item = await Menu.findByIdAndDelete(req.params.id);
+
+    if (!item) {
+      return res.status(404).json({
+        success: false,
+        message: "Menu item not found",
+      });
+    }
 
     res.json({
       success: true,
@@ -136,19 +141,26 @@ async function deleteMenuItem(req, res) {
 
 async function updateMenuStatus(req, res) {
   try {
-    const { available } = req.body;
+    const { isAvailable } = req.body;
 
     const item = await Menu.findByIdAndUpdate(
       req.params.id,
 
       {
-        available,
+        isAvailable,
       },
 
       {
         new: true,
       },
     );
+
+    if (!item) {
+      return res.status(404).json({
+        success: false,
+        message: "Menu item not found",
+      });
+    }
 
     res.json({
       success: true,

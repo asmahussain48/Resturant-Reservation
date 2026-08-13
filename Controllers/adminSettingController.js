@@ -26,15 +26,37 @@ async function getSettings(req, res) {
 
 async function updateSettings(req, res) {
   try {
+    const { openingTime, closingTime, slotDuration } = req.body;
+
+    if (!openingTime || !closingTime || !slotDuration) {
+      return res.status(400).json({
+        success: false,
+        message: "Opening time, closing time and slot duration are required",
+      });
+    }
+
+    if (openingTime >= closingTime) {
+      return res.status(400).json({
+        success: false,
+        message: "Closing time must be later than opening time",
+      });
+    }
+
     const settings = await RestaurantSettings.findOneAndUpdate(
       {},
-
-      req.body,
-
+      { openingTime, closingTime, slotDuration },
       {
         new: true,
+        runValidators: true,
       },
     );
+
+    if (!settings) {
+      return res.status(404).json({
+        success: false,
+        message: "Restaurant settings not found",
+      });
+    }
 
     res.json({
       success: true,
@@ -60,6 +82,13 @@ async function updateRestaurantStatus(req, res) {
   try {
     const { isOpen } = req.body;
 
+    if (typeof isOpen !== "boolean") {
+      return res.status(400).json({
+        success: false,
+        message: "Restaurant status must be open or closed",
+      });
+    }
+
     const settings = await RestaurantSettings.findOneAndUpdate(
       {},
 
@@ -71,6 +100,13 @@ async function updateRestaurantStatus(req, res) {
         new: true,
       },
     );
+
+    if (!settings) {
+      return res.status(404).json({
+        success: false,
+        message: "Restaurant settings not found",
+      });
+    }
 
     res.json({
       success: true,

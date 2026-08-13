@@ -2,137 +2,141 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>
-        Admin Settings | Royal Taste
-    </title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Settings | Royal Taste</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="stylesheet" href="/css/theme.css">
 </head>
 
-
 <body class="bg-[#F8F4EE] text-[#211A15]">
-
-
-    <div class="p-10 max-w-4xl mx-auto">
-
-
-        <h1 class="text-5xl font-serif font-bold">
-            Restaurant Settings
-        </h1>
-
-
-        <p class="text-gray-500 mt-2">
-            Manage restaurant timing and availability
-        </p>
-
-
-
-
-        <div class="bg-white rounded-3xl p-8 mt-10 shadow">
-
-
-            <div class="grid md:grid-cols-2 gap-6">
-
-
-                <div>
-
-                    <label>
-                        Opening Time
-                    </label>
-
-                    <input id="openingTime" type="time" class="border p-3 rounded-xl w-full mt-2" />
-
-                </div>
-
-
-
-                <div>
-
-                    <label>
-                        Closing Time
-                    </label>
-
-                    <input id="closingTime" type="time" class="border p-3 rounded-xl w-full mt-2" />
-
-                </div>
-
-
-
-                <div>
-
-                    <label>
-                        Slot Duration (Hours)
-                    </label>
-
-
-                    <input id="slotDuration" type="number" class="border p-3 rounded-xl w-full mt-2" />
-
-                </div>
-
-
+    <div class="min-h-screen flex">
+        <aside class="hidden lg:flex w-64 bg-[#2C2118] text-white p-8 flex-col fixed inset-y-0">
+            <div>
+                <h1 class="text-3xl font-serif font-bold text-[#D6A36A]">Royal Taste</h1>
+                <p class="text-sm text-stone-400 mt-2">ADMIN PANEL</p>
             </div>
 
+            <nav class="mt-12 space-y-2">
+                <a href="/admin/dashboard-page" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Dashboard</a>
+                <a href="/admin/reservations" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Reservations</a>
+                <a href="/admin/tables" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Tables</a>
+                <a href="/admin/menu" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Menu</a>
+                <a href="/admin/settings" class="block px-4 py-3 rounded-xl bg-[#8B5E34]">Settings</a>
+            </nav>
 
+            <p class="mt-auto text-xs leading-5 text-stone-400">Control operating hours and reservation availability.</p>
+        </aside>
 
+        <main class="flex-1 lg:ml-64 px-5 py-8 md:p-10 xl:p-12">
+            <header>
+                <p class="text-xs font-semibold uppercase tracking-[4px] text-[#8B5E34]">Restaurant Management</p>
+                <h1 class="font-serif text-4xl md:text-5xl font-bold mt-2">Restaurant Settings</h1>
+                <p class="text-gray-500 mt-2">Manage operating hours and booking availability.</p>
+            </header>
 
-
-            <div class="mt-8">
-
-
-                <p class="font-semibold">
-                    Restaurant Status
-                </p>
-
-
-
-                <button id="statusButton" onclick="toggleStatus()" class="
-mt-3
-px-6
-py-3
-rounded-full
-text-white
-">
-
-                </button>
-
-
-
+            <div id="loadingSettings" class="bg-white border border-[#ECE3D8] rounded-3xl p-12 mt-9 text-center text-gray-500">
+                Loading restaurant settings...
             </div>
 
+            <div id="settingsContent" class="hidden">
+                <section class="mt-9 bg-[#2C2118] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 overflow-hidden relative">
+                    <div class="absolute w-48 h-48 rounded-full bg-white/5 -right-12 -top-20"></div>
+                    <div class="relative flex items-center gap-4">
+                        <div id="statusIcon" class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl bg-green-500/15">●</div>
+                        <div>
+                            <p class="text-xs uppercase tracking-[3px] text-[#D6A36A]">Current Status</p>
+                            <h2 id="statusTitle" class="font-serif text-3xl font-bold mt-1">Restaurant Open</h2>
+                            <p id="statusDescription" class="text-stone-300 text-sm mt-1">Guests can make new reservations.</p>
+                        </div>
+                    </div>
 
+                    <button id="statusButton" type="button"
+                        class="relative bg-white text-[#2C2118] px-6 py-3 rounded-full font-semibold hover:bg-[#F4ECE2] disabled:opacity-60 transition">
+                        Close Restaurant
+                    </button>
+                </section>
 
+                <section class="grid md:grid-cols-3 gap-4 mt-6">
+                    <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                        <p class="text-sm text-gray-500">Opening Time</p>
+                        <p id="openingSummary" class="text-2xl font-bold mt-2">--</p>
+                    </div>
+                    <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                        <p class="text-sm text-gray-500">Closing Time</p>
+                        <p id="closingSummary" class="text-2xl font-bold mt-2">--</p>
+                    </div>
+                    <div class="bg-white border border-[#ECE3D8] rounded-2xl p-5">
+                        <p class="text-sm text-gray-500">Reservation Slots</p>
+                        <p id="slotsSummary" class="text-2xl font-bold text-[#8B5E34] mt-2">--</p>
+                    </div>
+                </section>
 
+                <section class="bg-white border border-[#E7DBCD] rounded-3xl p-6 md:p-8 mt-6 shadow-xl shadow-stone-900/5">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 border-b border-[#F0E7DD] pb-6">
+                        <div>
+                            <h2 class="font-serif text-3xl font-bold">Operating Hours</h2>
+                            <p class="text-gray-500 mt-1">These hours determine the available reservation times.</p>
+                        </div>
+                        <span id="savedBadge" class="hidden bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">Changes saved</span>
+                    </div>
 
-            <button onclick="saveSettings()" class="
-mt-10
-bg-[#8B5E34]
-text-white
-px-8
-py-3
-rounded-full
-">
+                    <form id="settingsForm" class="mt-7">
+                        <div class="grid md:grid-cols-2 gap-5">
+                            <label class="block">
+                                <span class="block text-sm font-semibold mb-2">Opening Time</span>
+                                <input id="openingTime" type="time"
+                                    class="w-full border border-[#DED3C6] bg-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]">
+                                <span class="block text-xs text-gray-400 mt-2">First available time of the day</span>
+                            </label>
 
-                Save Changes
+                            <label class="block">
+                                <span class="block text-sm font-semibold mb-2">Closing Time</span>
+                                <input id="closingTime" type="time"
+                                    class="w-full border border-[#DED3C6] bg-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]">
+                                <span class="block text-xs text-gray-400 mt-2">No bookings will begin after this time</span>
+                            </label>
 
-            </button>
+                            <label class="block md:col-span-2">
+                                <span class="block text-sm font-semibold mb-2">Reservation Duration</span>
+                                <select id="slotDuration"
+                                    class="w-full border border-[#DED3C6] bg-white p-4 rounded-xl outline-none focus:ring-2 focus:ring-[#8B5E34]/30 focus:border-[#8B5E34]">
+                                    <option value="1">1 hour</option>
+                                    <option value="2">2 hours</option>
+                                    <option value="3">3 hours</option>
+                                    <option value="4">4 hours</option>
+                                </select>
+                                <span class="block text-xs text-gray-400 mt-2">How long each table reservation lasts</span>
+                            </label>
+                        </div>
 
+                        <div class="bg-[#F8F4EE] border border-[#ECE3D8] rounded-2xl p-5 mt-6">
+                            <h3 class="font-semibold">Schedule Preview</h3>
+                            <p id="schedulePreview" class="text-sm text-gray-500 mt-2">Choose operating hours to preview the schedule.</p>
+                        </div>
 
+                        <p id="formError" class="hidden text-sm text-red-600 mt-4"></p>
 
-        </div>
-
-
-
+                        <div class="flex flex-wrap items-center gap-3 mt-7">
+                            <button id="saveButton" type="submit"
+                                class="bg-[#8B5E34] text-white px-8 py-3 rounded-full font-medium hover:bg-[#6F451F] disabled:opacity-60 transition shadow-lg shadow-[#8B5E34]/20">
+                                Save Changes
+                            </button>
+                            <button id="resetButton" type="button"
+                                class="border border-[#DED3C6] px-7 py-3 rounded-full font-medium hover:bg-[#F8F4EE] transition">
+                                Reset
+                            </button>
+                            <span id="unsavedMessage" class="hidden text-sm text-amber-700">You have unsaved changes</span>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </main>
     </div>
 
-
+    <div id="toast" class="hidden fixed right-5 bottom-5 z-50 text-white px-5 py-4 rounded-2xl shadow-2xl"></div>
 
     <script src="/js/adminSettings.js"></script>
-
-
 </body>
 
 </html>

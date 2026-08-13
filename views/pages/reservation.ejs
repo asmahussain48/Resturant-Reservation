@@ -8,6 +8,7 @@
     <title>Reserve Your Table | Royal Taste</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/theme.css">
   </head>
 
   <body class="bg-[#F8F4EE] text-[#211A15] min-h-screen">
@@ -133,60 +134,12 @@
         <!-- TIME -->
 
         <div class="mb-10">
-          <label class="block font-semibold mb-4">
-            Choose 2-Hour Time Slot
+          <label id="timeSlotLabel" class="block font-semibold mb-4">
+            Choose Time Slot
           </label>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-            <button
-              type="button"
-              data-time="12:00"
-              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
-            >
-              <span class="block font-semibold">12:00 PM</span>
-
-              <span class="text-xs text-gray-400">to 2:00 PM</span>
-            </button>
-
-            <button
-              type="button"
-              data-time="14:00"
-              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
-            >
-              <span class="block font-semibold">2:00 PM</span>
-
-              <span class="text-xs text-gray-400">to 4:00 PM</span>
-            </button>
-
-            <button
-              type="button"
-              data-time="16:00"
-              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
-            >
-              <span class="block font-semibold">4:00 PM</span>
-
-              <span class="text-xs text-gray-400">to 6:00 PM</span>
-            </button>
-
-            <button
-              type="button"
-              data-time="18:00"
-              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
-            >
-              <span class="block font-semibold">6:00 PM</span>
-
-              <span class="text-xs text-gray-400">to 8:00 PM</span>
-            </button>
-
-            <button
-              type="button"
-              data-time="20:00"
-              class="time-btn border border-[#DDD2C5] rounded-2xl py-4"
-            >
-              <span class="block font-semibold">8:00 PM</span>
-
-              <span class="text-xs text-gray-400">to 10:00 PM</span>
-            </button>
+          <div id="timeOptions" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <p class="text-sm text-gray-500 col-span-full">Loading available times...</p>
           </div>
         </div>
 
@@ -330,7 +283,9 @@
 
         const dateOptions = document.getElementById("dateOptions");
 
-        const timeButtons = document.querySelectorAll(".time-btn");
+        const timeOptions = document.getElementById("timeOptions");
+
+        const timeSlotLabel = document.getElementById("timeSlotLabel");
 
         const numberOfPeople = document.getElementById("numberOfPeople");
 
@@ -459,31 +414,84 @@
           }
         }
 
-        // Time selection
+        function formatReservationTime(time) {
+          const [hourText, minute] = time.split(":");
+          const hour = Number(hourText);
+          const suffix = hour >= 12 ? "PM" : "AM";
+          return `${hour % 12 || 12}:${minute} ${suffix}`;
+        }
 
-        timeButtons.forEach((button) => {
-          button.onclick = function () {
-            selectedTime = this.dataset.time;
+        function addHoursToTime(time, duration) {
+          const [hour, minute] = time.split(":").map(Number);
+          const totalMinutes = hour * 60 + minute + duration * 60;
+          const endHour = Math.floor(totalMinutes / 60) % 24;
+          const endMinute = totalMinutes % 60;
+          return `${String(endHour).padStart(2, "0")}:${String(endMinute).padStart(2, "0")}`;
+        }
 
-            timeButtons.forEach((btn) => {
-              btn.className = `
-            time-btn
-            border
-            border-[#DDD2C5]
-            rounded-2xl
-            py-4
-            `;
+        function selectTime(button) {
+          selectedTime = button.dataset.time;
+
+          document.querySelectorAll(".time-btn").forEach((btn) => {
+            btn.className =
+              "time-btn border border-[#DDD2C5] rounded-2xl py-4 px-3 hover:border-[#8B5E34] transition";
+          });
+
+          button.className =
+            "time-btn bg-[#2C2118] text-white rounded-2xl py-4 px-3 shadow-lg";
+        }
+
+        async function loadReservationSlots() {
+          try {
+            const response = await fetch("/reservation-slots");
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.message || "Unable to load reservation times");
+            }
+
+            timeOptions.innerHTML = "";
+            timeSlotLabel.textContent = `Choose ${data.slotDuration}-Hour Time Slot`;
+
+            if (!data.isOpen) {
+              timeOptions.innerHTML = `
+                <div class="col-span-full bg-red-50 border border-red-200 text-red-600 rounded-2xl p-5">
+                  The restaurant is currently closed for new reservations.
+                </div>
+              `;
+              findTablesButton.disabled = true;
+              findTablesButton.classList.add("opacity-50", "cursor-not-allowed");
+              return;
+            }
+
+            if (data.slots.length === 0) {
+              timeOptions.innerHTML = `
+                <p class="col-span-full text-gray-500">No reservation times are available.</p>
+              `;
+              return;
+            }
+
+            data.slots.forEach((time) => {
+              const button = document.createElement("button");
+              const endTime = addHoursToTime(time, data.slotDuration);
+
+              button.type = "button";
+              button.dataset.time = time;
+              button.className =
+                "time-btn border border-[#DDD2C5] rounded-2xl py-4 px-3 hover:border-[#8B5E34] transition";
+              button.innerHTML = `
+                <span class="block font-semibold">${formatReservationTime(time)}</span>
+                <span class="text-xs text-gray-400">to ${formatReservationTime(endTime)}</span>
+              `;
+              button.addEventListener("click", () => selectTime(button));
+              timeOptions.appendChild(button);
             });
-
-            this.className = `
-        time-btn
-        bg-[#2C2118]
-        text-white
-        rounded-2xl
-        py-4
-        `;
-          };
-        });
+          } catch (error) {
+            timeOptions.innerHTML = `
+              <p class="col-span-full text-red-600">${error.message}</p>
+            `;
+          }
+        }
 
         // Find available tables
 
@@ -673,6 +681,7 @@
         // Start
 
         createNextSevenDays();
+        loadReservationSlots();
       </script>
     </main>
   </body>

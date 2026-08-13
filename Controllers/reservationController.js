@@ -5,6 +5,7 @@
     getAvailableTables,
     getAvailableSlots,
   } = require("../services/availabilityService");
+  const { getRestaurantSettings } = require("../services/settingsService");
 
   async function checkAvailability(req, res) {
     try {
@@ -105,11 +106,19 @@
 
       // Calculate end time
 
-      const startHour = Number(startTime.split(":")[0]);
+      const settings = await getRestaurantSettings();
 
-      const endHour = startHour + 2;
+      if (!settings || !settings.isOpen) {
+        return res.status(400).json({
+          success: false,
+          message: "The restaurant is currently closed for reservations",
+        });
+      }
 
-      const endTime = `${endHour}:00`;
+      const [startHour, startMinute] = startTime.split(":").map(Number);
+      const endMinutes =
+        startHour * 60 + startMinute + settings.slotDuration * 60;
+      const endTime = `${String(Math.floor(endMinutes / 60)).padStart(2, "0")}:${String(endMinutes % 60).padStart(2, "0")}`;
 
       // Create reservation
 
@@ -238,12 +247,29 @@
 
   async function getReservationSlots(req, res) {
     try {
+      const settings = await getRestaurantSettings();
+
+      if (!settings) {
+        return res.status(404).json({
+          success: false,
+          message: "Restaurant settings not found",
+        });
+      }
+
       const slots = await getAvailableSlots();
 
       res.status(200).json({
         success: true,
 
         slots,
+
+        openingTime: settings.openingTime,
+
+        closingTime: settings.closingTime,
+
+        slotDuration: settings.slotDuration,
+
+        isOpen: settings.isOpen,
       });
     } catch (error) {
       console.log(error);

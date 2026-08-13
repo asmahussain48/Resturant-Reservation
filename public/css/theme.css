@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --color-background: #f8f4ee;
+  --color-surface: #ffffff;
+  --color-text: #211a15;
+  --color-muted: #6b7280;
+  --color-primary: #8b5e34;
+  --color-primary-hover: #6f451f;
+  --color-dark: #2c2118;
+  --color-accent: #d6a36a;
+  --color-border: #e7dbcd;
+  --color-soft: #f4ece2;
+  --color-success: #15803d;
+  --color-danger: #dc2626;
+}
+
+html {
+  font-family: "Inter", sans-serif;
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Inter", sans-serif !important;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Keep one typeface even where older templates use Tailwind's serif class. */
+.font-serif {
+  font-family: "Inter", sans-serif !important;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  transition-duration: 200ms;
+}
+
+input,
+select,
+textarea {
+  color: var(--color-text);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(139, 94, 52, 0.28);
+  outline-offset: 2px;
+}
+
+::selection {
+  color: #ffffff;
+  background: var(--color-primary);
+}

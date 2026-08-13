@@ -2,356 +2,94 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>
-        Admin Dashboard | Royal Taste
-    </title>
-
+    <title>Admin Dashboard | Royal Taste</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <link rel="stylesheet" href="/css/theme.css">
 </head>
 
-
 <body class="bg-[#F8F4EE] text-[#211A15]">
-
-
     <div class="min-h-screen flex">
-
-
-
-        <!-- Sidebar -->
-
-        <aside class="w-64 bg-[#2C2118] text-white p-8">
-
-
-            <h1 class="text-3xl font-serif font-bold text-[#D6A36A]">
-
-                🍂 Royal Taste
-
-            </h1>
-
-
-            <p class="text-gray-300 mt-2">
-
-                Admin Panel
-
-            </p>
-
-
-
-            <div class="mt-10 space-y-4">
-
-
-                <a href="/admin/dashboard" class="block bg-[#8B5E34] rounded-xl px-4 py-3">
-
-                    Dashboard
-
-                </a>
-
-
-                <a href="/admin/reservations" class="block hover:text-[#D6A36A]">
-
-                    Reservations
-
-                </a>
-
-
-                <a href="/admin/tables" class="block hover:text-[#D6A36A]">
-
-                    Tables
-
-                </a>
-
-
-                <a href="/admin/menu" class="block hover:text-[#D6A36A]">
-
-                    Menu
-
-                </a>
-
-
-                <a href="/admin/settings" class="block hover:text-[#D6A36A]">
-
-                    Settings
-
-                </a>
-
-
-
+        <aside class="hidden lg:flex w-64 bg-[#2C2118] text-white p-8 flex-col fixed inset-y-0">
+            <div>
+                <h1 class="text-3xl font-bold text-[#D6A36A]">Royal Taste</h1>
+                <p class="text-sm text-stone-400 mt-2">ADMIN PANEL</p>
             </div>
 
+            <nav class="mt-12 space-y-2">
+                <a href="/admin/dashboard-page" class="block px-4 py-3 rounded-xl bg-[#8B5E34]">Dashboard</a>
+                <a href="/admin/reservations" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Reservations</a>
+                <a href="/admin/tables" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Tables</a>
+                <a href="/admin/menu" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Menu</a>
+                <a href="/admin/settings" class="block px-4 py-3 rounded-xl hover:bg-white/10 transition">Settings</a>
+            </nav>
 
+            <button id="logoutButton" type="button"
+                class="mt-auto text-left px-4 py-3 rounded-xl text-red-300 hover:bg-white/10 transition">
+                Logout
+            </button>
         </aside>
 
-
-
-
-
-        <!-- Main Content -->
-
-        <main class="flex-1 p-10">
-
-
-            <div class="flex justify-between items-center">
-
-
+        <main class="flex-1 lg:ml-64 px-5 py-8 md:p-10 xl:p-12">
+            <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-
-                    <h1 class="text-5xl font-serif font-bold">
-
-                        Dashboard
-
-                    </h1>
-
-
-                    <p class="text-gray-500 mt-2">
-
-                        Restaurant overview
-
-                    </p>
-
-
+                    <p class="text-xs font-semibold uppercase tracking-[4px] text-[#8B5E34]">Restaurant Overview</p>
+                    <h1 class="text-4xl md:text-5xl font-bold mt-2">Dashboard</h1>
+                    <p id="dashboardDate" class="text-gray-500 mt-2">Today's restaurant summary.</p>
                 </div>
-
-
-
-
-                <button id="logoutButton" class="
-bg-[#8B5E34]
-text-white
-px-6
-py-3
-rounded-full
-">
-
-                    Logout
-
-                </button>
-
-
-
-            </div>
-
-
-
-
-
-
-            <!-- Cards -->
-
-
-            <div class="grid md:grid-cols-3 gap-6 mt-10">
-
-
-
-                <div class="bg-white rounded-3xl p-6 shadow">
-
-                    <p class="text-gray-400">
-
-                        Today's Reservations
-
-                    </p>
-
-
-                    <h2 id="todayReservations" class="text-4xl font-bold mt-3">
-
-                        0
-
-                    </h2>
-
-
-                </div>
-
-
-
-
-
-                <div class="bg-white rounded-3xl p-6 shadow">
-
-                    <p class="text-gray-400">
-
-                        Upcoming Reservations
-
-                    </p>
-
-
-                    <h2 id="upcomingReservations" class="text-4xl font-bold mt-3">
-
-                        0
-
-                    </h2>
-
-
-                </div>
-
-
-
-
-
-
-                <div class="bg-white rounded-3xl p-6 shadow">
-
-                    <p class="text-gray-400">
-
-                        Today's Guests
-
-                    </p>
-
-
-                    <h2 id="todayGuests" class="text-4xl font-bold mt-3">
-
-                        0
-
-                    </h2>
-
-
-                </div>
-
-
-
-
-                <div class="bg-white rounded-3xl p-6 shadow">
-
-                    <p class="text-gray-400">
-
-                        Available Tables
-
-                    </p>
-
-
-                    <h2 id="availableTables" class="text-4xl font-bold mt-3">
-
-                        0
-
-                    </h2>
-
-
-                </div>
-
-
-
-
-
-                <div class="bg-white rounded-3xl p-6 shadow">
-
-                    <p class="text-gray-400">
-
-                        Occupied Tables
-
-                    </p>
-
-
-                    <h2 id="occupiedTables" class="text-4xl font-bold mt-3">
-
-                        0
-
-                    </h2>
-
-
-                </div>
-
-
-
-
-
-
-                <div class="bg-white rounded-3xl p-6 shadow">
-
-                    <p class="text-gray-400">
-
-                        Cancelled
-
-                    </p>
-
-
-                    <h2 id="cancelledReservations" class="text-4xl font-bold mt-3">
-
-                        0
-
-                    </h2>
-
-
-                </div>
-
-
-
-            </div>
-        </div>
-        
-        
-        <!-- Charts -->
-        
-        <div class="grid lg:grid-cols-2 gap-8 mt-10">
-        
-        
-            <div class="bg-white rounded-3xl p-6 shadow">
-        
-                <h2 class="text-xl font-bold mb-5">
-                    Weekly Reservations
-                </h2>
-        
-                <div class="h-72">
-                    <canvas id="weeklyChart"></canvas>
-                </div>
-        
-            </div>
-        
-        
-        
-        
-            <div class="bg-white rounded-3xl p-6 shadow">
-        
-                <h2 class="text-xl font-bold mb-5">
-                    Peak Hours
-                </h2>
-        
-                <div class="h-72">
-                    <canvas id="peakChart"></canvas>
-                </div>
-        
-            </div>
-        
-        
-        
-        
-        
-            <div class="bg-white rounded-3xl p-6 shadow">
-        
-                <h2 class="text-xl font-bold mb-5">
-                    Table Usage
-                </h2>
-        
-                <div class="h-72">
-                    <canvas id="tableChart"></canvas>
-                </div>
-        
-            </div>
-        
-        
-        
-        
-        
-            <div class="bg-white rounded-3xl p-6 shadow">
-        
-                <h2 class="text-xl font-bold mb-5">
-                    Customer Growth
-                </h2>
-        
-                <div class="h-72">
-                    <canvas id="customerChart"></canvas>
-                </div>
-        
-            </div>      </div>
-
+                <a href="/admin/reservations"
+                    class="bg-[#8B5E34] text-white px-6 py-3 rounded-full font-medium hover:bg-[#6F451F] transition shadow-lg shadow-[#8B5E34]/20">
+                    Manage Reservations
+                </a>
+            </header>
+
+            <section class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5 mt-9">
+                <article class="bg-white border border-[#ECE3D8] rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <p class="text-sm text-gray-500">Today's Reservations</p>
+                        <span class="text-xs bg-[#F4ECE2] text-[#8B5E34] px-3 py-1 rounded-full">Today</span>
+                    </div>
+                    <p id="todayReservations" class="text-4xl font-bold mt-3">—</p>
+                    <p class="text-xs text-gray-400 mt-2">Pending and confirmed bookings</p>
+                </article>
+
+                <article class="bg-white border border-[#ECE3D8] rounded-3xl p-6">
+                    <p class="text-sm text-gray-500">Upcoming Reservations</p>
+                    <p id="upcomingReservations" class="text-4xl font-bold mt-3">—</p>
+                    <p class="text-xs text-gray-400 mt-2">Active bookings from today onward</p>
+                </article>
+
+                <article class="bg-white border border-[#ECE3D8] rounded-3xl p-6">
+                    <p class="text-sm text-gray-500">Today's Expected Guests</p>
+                    <p id="todayGuests" class="text-4xl font-bold mt-3">—</p>
+                    <p class="text-xs text-gray-400 mt-2">Total guests across today's bookings</p>
+                </article>
+
+                <article class="bg-white border border-[#ECE3D8] rounded-3xl p-6">
+                    <p class="text-sm text-gray-500">Available Tables</p>
+                    <p id="availableTables" class="text-4xl font-bold text-green-700 mt-3">—</p>
+                    <p class="text-xs text-gray-400 mt-2">Active tables not assigned today</p>
+                </article>
+
+                <article class="bg-white border border-[#ECE3D8] rounded-3xl p-6">
+                    <p class="text-sm text-gray-500">Tables in Use Today</p>
+                    <p id="occupiedTables" class="text-4xl font-bold text-[#8B5E34] mt-3">—</p>
+                    <p class="text-xs text-gray-400 mt-2">Unique tables with active bookings</p>
+                </article>
+
+                <article class="bg-white border border-[#ECE3D8] rounded-3xl p-6">
+                    <p class="text-sm text-gray-500">All-time Cancellations</p>
+                    <p id="cancelledReservations" class="text-4xl font-bold text-red-600 mt-3">—</p>
+                    <p class="text-xs text-gray-400 mt-2">Reservations marked as cancelled</p>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <div id="dashboardError"
+        class="hidden fixed right-5 bottom-5 z-50 bg-red-600 text-white px-5 py-4 rounded-2xl shadow-2xl"></div>
     <script src="/js/adminDashboard.js"></script>
-
-
 </body>
 
 </html>
