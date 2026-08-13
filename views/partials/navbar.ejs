@@ -1,64 +1,35 @@
-<nav class="bg-[#FAF7F2] px-8 py-6 flex justify-between items-center">
-    <div>
-        <h1 class="text-3xl font-serif font-bold text-[#8B5E34]">🍂 Royal Taste</h1>
-        <p class="text-sm text-gray-500 tracking-widest">FINE DINING EXPERIENCE</p>
-    </div>
+<nav class="bg-[#FAF7F2] border-b border-[#E9DFD3] px-5 md:px-8 py-4 flex flex-wrap justify-between items-center gap-4">
+  <div>
+    <a href="/" class="text-2xl md:text-3xl font-serif font-bold text-[#8B5E34]">Royal Taste</a>
+    <p class="text-xs text-gray-500 tracking-widest">FINE DINING EXPERIENCE</p>
+  </div>
 
-    <div class="flex items-center gap-8 text-gray-700">
-        <a href="/" class="hover:text-[#8B5E34] transition">Home</a>
-
+  <div class="flex flex-wrap items-center gap-3 md:gap-7 text-sm md:text-base text-gray-700">
+    <a href="/" class="hover:text-[#8B5E34] transition">Home</a>
+    <% if (user) { %>
+      <% if (user.role === "admin") { %>
+        <a href="/admin/dashboard-page" class="hover:text-[#8B5E34] transition">Admin Dashboard</a>
+      <% } else { %>
         <a href="/menu" class="hover:text-[#8B5E34] transition">Menu</a>
-
-        <a href="/my-reservations" class="hover:text-[#8B5E34] transition">
-            My Table
-        </a>
-
-        <% if(user) { %>
-
-            <div class="relative group">
-                <button class="bg-[#8B5E34] text-white px-6 py-3 rounded-full font-medium flex items-center gap-2 hover:bg-[#6F451F] transition duration-300">
-                    <span>👤</span>
-                    <span><%= user.name %></span>
-                    <span class="text-xs">▼</span>
-                </button>
-
-                <div class="hidden group-hover:block absolute top-full right-0 pt-3 w-40 z-50">
-                    <div class="bg-white shadow-xl rounded-xl p-4">
-                        <a href="/my-reservations" class="block py-2 hover:text-[#8B5E34]">
-                            My Reservations
-                        </a>
-
-                        <button id="logoutButton" class="block py-2 text-red-600">
-                            Logout
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-        <% } else { %>
-
-            <a href="/login" class="bg-[#8B5E34] text-white px-6 py-3 rounded-full hover:bg-[#6F451F] transition">
-                Login
-            </a>
-
-        <% } %>
-    </div>
+        <a href="/reservation" class="hover:text-[#8B5E34] transition">Reserve</a>
+        <a href="/my-reservations" class="hover:text-[#8B5E34] transition">My Reservations</a>
+      <% } %>
+      <span class="font-medium"><%= user.name %></span>
+      <button id="logoutButton" type="button" class="bg-[#8B5E34] text-white px-5 py-2.5 rounded-full hover:bg-[#6F451F] transition">Logout</button>
+    <% } else { %>
+      <a href="/login" class="hover:text-[#8B5E34]">Login</a>
+      <a href="/register" class="bg-[#8B5E34] text-white px-5 py-2.5 rounded-full hover:bg-[#6F451F] transition">Register</a>
+    <% } %>
+  </div>
 </nav>
 
 <script>
-    const logoutButton = document.getElementById("logoutButton");
-
-    if (logoutButton) {
-        logoutButton.onclick = async () => {
-            const response = await fetch("/logout", {
-                method: "POST"
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                window.location.href = "/login";
-            }
-        };
-    }
+  const logoutButton = document.getElementById("logoutButton");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+      const response = await fetch("/logout", { method: "POST" });
+      if (response.ok) window.location.href = "/login";
+      else alert("Logout failed. Please try again.");
+    });
+  }
 </script>

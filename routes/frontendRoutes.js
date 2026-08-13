@@ -1,33 +1,33 @@
 const express = require("express");
 
-const { requireAuth } = require("../middleware/authMiddleware");
+const { requirePageAuth, requireGuest } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
 // Login page
-router.get("/login", (req, res) => {
+router.get("/login", requireGuest, (req, res) => {
   res.render("pages/login");
 });
 
 // Register page
-router.get("/register", (req, res) => {
+router.get("/register", requireGuest, (req, res) => {
   res.render("pages/register");
 });
 
 // Menu page
-router.get("/menu", requireAuth, (req, res) => {
+router.get("/menu", (req, res) => {
   res.render("pages/menu");
 });
 
 // Reservation page added to the 
 router.get(
   "/reservation",
-  requireAuth,
+  requirePageAuth,
   (req, res) => {
     res.render("pages/reservation");
   }
 );
-router.get("/my-reservations", (req, res) => {
+router.get("/my-reservations", requirePageAuth, (req, res) => {
   res.render("pages/myReservations");
 });
 module.exports = router;

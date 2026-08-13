@@ -122,17 +122,25 @@ async function loginUser(req, res) {
       role: user.role,
     };
 
-    // Decide where user goes
+    let redirect = user.role === "admin" ? "/admin/dashboard-page" : "/menu";
 
-    let redirect;
-
-    if (user.role === "admin") {
-      redirect = "/admin/dashboard-page";
-    } else {
-      redirect = "/menu";
+    if (
+      user.role === "user" &&
+      typeof req.session.returnTo === "string" &&
+      req.session.returnTo.startsWith("/") &&
+      !req.session.returnTo.startsWith("//")
+    ) {
+      redirect = req.session.returnTo;
     }
 
-    return res.status(200).json({
+    delete req.session.returnTo;
+
+    req.session.save((sessionError) => {
+      if (sessionError) {
+        return res.status(500).json({ success: false, message: "Unable to start your session" });
+      }
+
+      return res.status(200).json({
       success: true,
 
       message: "Login successful",
@@ -148,6 +156,7 @@ async function loginUser(req, res) {
 
         role: user.role,
       },
+      });
     });
   } catch (error) {
 

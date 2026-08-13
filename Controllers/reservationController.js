@@ -115,6 +115,15 @@
         });
       }
 
+      const validSlots = await getAvailableSlots();
+
+      if (!validSlots.includes(startTime)) {
+        return res.status(400).json({
+          success: false,
+          message: "Please select one of the available reservation times",
+        });
+      }
+
       const [startHour, startMinute] = startTime.split(":").map(Number);
       const endMinutes =
         startHour * 60 + startMinute + settings.slotDuration * 60;

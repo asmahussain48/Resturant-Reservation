@@ -1,14 +1,12 @@
  
 const express = require("express");
+const { requirePageAuth } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 router.get("/", (req, res) => {
   res.render("pages/home");
 });
-router.get("/my-reservations", (req, res) => {
-  res.render("pages/myReservations");
-});
-router.get("/reservations/:id", (req, res) => {
+router.get("/reservations/:id", requirePageAuth, (req, res) => {
   res.render("pages/reservationDetails");
 });
 module.exports = router;

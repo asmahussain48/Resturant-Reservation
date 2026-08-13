@@ -24,16 +24,8 @@ const reservationValidation = [
   body("startTime")
     .notEmpty()
     .withMessage("Start time is required")
-
-    .custom((time) => {
-      const allowedSlots = ["12:00", "14:00", "16:00", "18:00", "20:00"];
-
-      if (!allowedSlots.includes(time)) {
-        throw new Error("Invalid reservation time slot");
-      }
-
-      return true;
-    }),
+    .matches(/^([01]\d|2[0-3]):[0-5]\d$/)
+    .withMessage("Invalid reservation time format"),
 
   body("numberOfPeople")
     .isInt({
@@ -58,10 +50,12 @@ function validateRequest(req, res, next) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
+    const validationErrors = errors.array();
+
     return res.status(400).json({
       success: false,
-
-      errors: errors.array(),
+      message: validationErrors[0].msg,
+      errors: validationErrors,
     });
   }
 
@@ -72,4 +66,3 @@ module.exports = {
   reservationValidation,
   validateRequest,
 };
-

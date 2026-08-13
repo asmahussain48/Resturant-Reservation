@@ -12,6 +12,7 @@
   </head>
 
   <body class="bg-[#F8F4EE] text-[#211A15] min-h-screen">
+    <%- include("../partials/navbar") %>
     <!-- HEADER -->
 
     <section class="px-6 pt-12 pb-8">
@@ -655,26 +656,40 @@
             phone: customerPhone.value,
           };
 
-          const response = await fetch("/reservations", {
-            method: "POST",
+          confirmReservationButton.disabled = true;
+          confirmReservationButton.textContent = "Confirming...";
 
-            headers: {
-              "Content-Type": "application/json",
-            },
+          try {
+            const response = await fetch("/reservations", {
+              method: "POST",
 
-            body: JSON.stringify(reservationData),
-          });
+              headers: {
+                "Content-Type": "application/json",
+              },
 
-          const data = await response.json();
+              body: JSON.stringify(reservationData),
+            });
 
-          if (data.success) {
-            alert("Reservation Created Successfully");
+            const data = await response.json();
 
+            if (!response.ok || !data.success) {
+              const message =
+                data.message ||
+                data.errors?.[0]?.msg ||
+                "Unable to create reservation. Please try again.";
+
+              alert(message);
+              return;
+            }
+
+            alert(data.message || "Reservation created successfully");
             updateProgress(4);
-
             window.location.href = "/my-reservations";
-          } else {
-            alert(data.message);
+          } catch (error) {
+            alert("Unable to connect to the server. Please try again.");
+          } finally {
+            confirmReservationButton.disabled = false;
+            confirmReservationButton.textContent = "Confirm Reservation";
           }
         };
 

@@ -1,0 +1,22 @@
+<header class="bg-[#2C2118] text-white px-5 md:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
+  <div class="flex items-center gap-4">
+    <button type="button" onclick="history.back()" class="text-stone-300 hover:text-white">← Back</button>
+    <a href="/admin/dashboard-page" class="font-serif text-xl font-bold text-[#D6A36A]">Royal Taste Admin</a>
+  </div>
+  <nav class="flex flex-wrap items-center gap-4 text-sm">
+    <a href="/admin/dashboard-page" class="hover:text-[#D6A36A]">Dashboard</a>
+    <a href="/admin/reservations" class="hover:text-[#D6A36A]">Reservations</a>
+    <a href="/admin/tables" class="hover:text-[#D6A36A]">Tables</a>
+    <a href="/admin/menu" class="hover:text-[#D6A36A]">Menu</a>
+    <a href="/admin/customers-page" class="hover:text-[#D6A36A]">Customers</a>
+    <a href="/admin/settings" class="hover:text-[#D6A36A]">Settings</a>
+    <button type="button" data-admin-logout class="text-red-300 hover:text-red-200">Logout</button>
+  </nav>
+</header>
+<script>
+  document.querySelector("[data-admin-logout]").addEventListener("click", async () => {
+    const response = await fetch("/logout", { method: "POST" });
+    if (response.ok) window.location.href = "/login";
+    else alert("Logout failed. Please try again.");
+  });
+</script>

@@ -31,17 +31,4 @@ document.getElementById("dashboardDate").textContent =
     year: "numeric",
   })} · Today's restaurant summary.`;
 
-document.getElementById("logoutButton").addEventListener("click", async () => {
-  try {
-    const response = await fetch("/logout", { method: "POST" });
-    const data = await response.json();
-
-    if (data.success) {
-      window.location.href = "/login";
-    }
-  } catch (error) {
-    showError("Unable to log out. Please try again.");
-  }
-});
-
 loadDashboard();
