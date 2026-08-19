@@ -7,6 +7,8 @@ const {
 
   getWeeklyReservations,
 
+  getReservationStatusBreakdown,
+
   getPeakHours,
 
   getTableUtilization,
@@ -25,6 +27,13 @@ router.get(
   requireAuth,
   isAdmin,
   getWeeklyReservations,
+);
+
+router.get(
+  "/admin/dashboard/reservation-status",
+  requireAuth,
+  isAdmin,
+  getReservationStatusBreakdown,
 );
 
 router.get("/admin/dashboard/peak-hours", requireAuth, isAdmin, getPeakHours);

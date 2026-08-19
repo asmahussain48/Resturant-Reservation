@@ -10,6 +10,12 @@ function toDateKey(date) {
   ].join("-");
 }
 
+function formatHour(hour) {
+  const suffix = hour >= 12 ? "PM" : "AM";
+  const displayHour = hour % 12 || 12;
+  return `${displayHour} ${suffix}`;
+}
+
 async function getDashboard(req, res) {
   try {
     const today = toDateKey(new Date());
@@ -98,13 +104,54 @@ async function getWeeklyReservations(req, res) {
   }
 }
 
+async function getReservationStatusBreakdown(req, res) {
+  try {
+    const statuses = ["confirmed", "pending", "cancelled"];
+
+    const grouped = await Reservation.aggregate([
+      { $match: { status: { $in: statuses } } },
+      { $group: { _id: "$status", total: { $sum: 1 } } },
+    ]);
+
+    const counts = new Map(grouped.map((item) => [item._id, item.total]));
+    const data = statuses.map((status) => ({
+      status,
+      total: counts.get(status) || 0,
+    }));
+
+    res.json({ success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
 async function getPeakHours(req, res) {
   try {
-    const data = await Reservation.aggregate([
+    const grouped = await Reservation.aggregate([
       { $match: { status: { $in: ["pending", "confirmed"] } } },
-      { $group: { _id: "$startTime", count: { $sum: 1 } } },
+      {
+        $addFields: {
+          reservationHour: {
+            $convert: {
+              input: { $substrBytes: ["$startTime", 0, 2] },
+              to: "int",
+              onError: null,
+              onNull: null,
+            },
+          },
+        },
+      },
+      { $match: { reservationHour: { $ne: null } } },
+      { $group: { _id: "$reservationHour", reservations: { $sum: 1 } } },
       { $sort: { _id: 1 } },
     ]);
+
+    const data = grouped.map((item) => ({
+      hour: formatHour(item._id),
+      hour24: item._id,
+      reservations: item.reservations,
+    }));
 
     res.json({ success: true, data });
   } catch (error) {
@@ -171,6 +218,7 @@ async function getCustomerGrowth(req, res) {
 module.exports = {
   getDashboard,
   getWeeklyReservations,
+  getReservationStatusBreakdown,
   getPeakHours,
   getTableUtilization,
   getCustomerGrowth,
