@@ -65,11 +65,105 @@
                     <p class="text-xs text-gray-400 mt-2">Reservations marked as cancelled</p>
                 </article>
             </section>
+
+            <section class="bg-white border border-[#ECE3D8] rounded-3xl p-5 sm:p-7 mt-6 shadow-sm shadow-[#8B5E34]/5">
+                <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="h-2 w-2 rounded-full bg-[#8B5E34]"></span>
+                            <p class="text-xs font-semibold uppercase tracking-[3px] text-[#8B5E34]">Last 7 Days</p>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-bold mt-2">Reservation activity</h2>
+                        <p class="text-sm text-gray-500 mt-1">Pending and confirmed bookings by day.</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 sm:gap-3" aria-label="Weekly reservation summary">
+                        <div class="min-w-20 rounded-2xl bg-[#FAF7F2] px-3 py-2.5">
+                            <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Total</p>
+                            <p id="weeklyTotal" class="mt-1 text-lg font-bold text-[#211A15]">—</p>
+                        </div>
+                        <div class="min-w-20 rounded-2xl bg-[#FAF7F2] px-3 py-2.5">
+                            <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Average</p>
+                            <p id="weeklyAverage" class="mt-1 text-lg font-bold text-[#211A15]">—</p>
+                        </div>
+                        <div class="min-w-20 rounded-2xl bg-[#F4ECE2] px-3 py-2.5">
+                            <p class="text-[10px] font-semibold uppercase tracking-wider text-[#8B5E34]">Peak</p>
+                            <p id="weeklyPeak" class="mt-1 text-lg font-bold text-[#8B5E34]">—</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-64 sm:h-72 mt-7">
+                    <canvas id="weeklyReservationsChart" role="img"
+                        aria-label="Bar chart showing reservations for each of the last seven days">
+                        Reservations for the last seven days.
+                    </canvas>
+                </div>
+            </section>
+
+            <section class="bg-white border border-[#ECE3D8] rounded-3xl p-5 sm:p-7 mt-6 shadow-sm shadow-[#8B5E34]/5">
+                <div class="flex flex-col gap-1">
+                    <div class="flex items-center gap-2">
+                        <span class="h-2 w-2 rounded-full bg-[#8B5E34]"></span>
+                        <p class="text-xs font-semibold uppercase tracking-[3px] text-[#8B5E34]">All Reservations</p>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold mt-2">Reservation status</h2>
+                    <p class="text-sm text-gray-500">A clear breakdown of confirmed, pending, and cancelled bookings.</p>
+                </div>
+
+                <div class="mt-7 grid items-center gap-8 md:grid-cols-[minmax(240px,0.8fr)_minmax(280px,1.2fr)] lg:gap-14">
+                    <div class="relative mx-auto h-60 w-full max-w-64 sm:h-64" id="statusChartContainer">
+                        <canvas id="reservationStatusChart" role="img"
+                            aria-label="Doughnut chart showing confirmed, pending, and cancelled reservations">
+                            Reservation status breakdown.
+                        </canvas>
+                    </div>
+
+                    <div id="statusLegend" class="space-y-3" aria-label="Reservation status totals">
+                        <div class="animate-pulse rounded-2xl bg-[#FAF7F2] h-16"></div>
+                        <div class="animate-pulse rounded-2xl bg-[#FAF7F2] h-16"></div>
+                        <div class="animate-pulse rounded-2xl bg-[#FAF7F2] h-16"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white border border-[#ECE3D8] rounded-3xl p-5 sm:p-7 mt-6 shadow-sm shadow-[#8B5E34]/5">
+                <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="h-2 w-2 rounded-full bg-[#8B5E34]"></span>
+                            <p class="text-xs font-semibold uppercase tracking-[3px] text-[#8B5E34]">Booking Patterns</p>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-bold mt-2">Peak reservation hours</h2>
+                        <p class="text-sm text-gray-500 mt-1">See when guests prefer to book their tables.</p>
+                    </div>
+
+                    <div class="rounded-2xl bg-[#F4ECE2] px-4 py-3 sm:min-w-36">
+                        <p class="text-[10px] font-semibold uppercase tracking-wider text-[#8B5E34]">Busiest hour</p>
+                        <div class="mt-1 flex items-baseline gap-2">
+                            <p id="busiestHour" class="text-xl font-bold text-[#8B5E34]">—</p>
+                            <p id="busiestHourCount" class="text-xs font-medium text-[#8B5E34]/70"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="peakHoursChartContainer" class="h-72 sm:h-80 mt-7">
+                    <canvas id="peakHoursChart" role="img"
+                        aria-label="Bar chart showing reservation totals grouped by hour">
+                        Peak reservation hours.
+                    </canvas>
+                </div>
+                <div id="peakHoursEmpty" class="hidden h-64 items-center justify-center rounded-2xl bg-[#FAF7F2] text-center">
+                    <div>
+                        <p class="font-semibold text-[#211A15]">No booking activity yet</p>
+                        <p class="mt-1 text-sm text-gray-500">Hourly trends will appear after reservations are added.</p>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
     <div id="dashboardError"
         class="hidden fixed right-5 bottom-5 z-50 bg-red-600 text-white px-5 py-4 rounded-2xl shadow-2xl"></div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
     <script src="/js/adminDashboard.js"></script>
 </body>
 
