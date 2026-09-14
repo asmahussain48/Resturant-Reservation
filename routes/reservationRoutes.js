@@ -12,7 +12,7 @@ const {
 const {
   reservationValidation,
   validateRequest,
-} = require("../middleware/validationMiddleware");
+} = require("../validators/reservationValidators");
 
 const { requireAuth } = require("../middleware/authMiddleware");
 

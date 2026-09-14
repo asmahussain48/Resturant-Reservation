@@ -75,19 +75,8 @@ const reservationSchema = new mongoose.Schema(
 
 
 
-// Prevent double booking
-// /* reservationSchema.index(
-//   {
-//     table: 1,
-//     reservationDate: 1,
-//     startTime: 1,
-//   },
-//   {
-//     unique: true,
-//   }
-// ); it is uniquq but not alowing if a reservation created then cancel it still not allow others to use that cancel one reservation
-
-
+// Prevent double booking, but only among active reservations - a cancelled
+// reservation must free up the same table/date/time slot for someone else.
 reservationSchema.index(
   {
     table: 1,

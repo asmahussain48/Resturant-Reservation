@@ -10,7 +10,7 @@ const {
   getCustomerReservations,
 } = require("../controllers/adminCustomerController");
 
-const { requireAuth } = require("../middleware/authMiddleware");
+const { requireAuth, requirePageAuth } = require("../middleware/authMiddleware");
 
 const isAdmin = require("../middleware/isAdmin");
 
@@ -50,11 +50,11 @@ router.get(
   getCustomerReservations,
 );
 
-router.get("/admin/customers-page", requireAuth, isAdmin, (req, res) => {
+router.get("/admin/customers-page", requirePageAuth, isAdmin, (req, res) => {
   res.render("admin/customers");
 });
 
-router.get("/admin/customer-details/:id", requireAuth, isAdmin, (req, res) => {
+router.get("/admin/customer-details/:id", requirePageAuth, isAdmin, (req, res) => {
   res.render("admin/customerDetails");
 });
 

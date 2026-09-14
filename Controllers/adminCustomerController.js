@@ -5,40 +5,34 @@ const Reservation = require("../models/Reservation");
 
 async function getCustomers(req, res) {
   try {
-    const customers = await User.find({
-      role: "user",
-    }).select("-passwordHash");
-
-    const data = await Promise.all(
-      customers.map(async (customer) => {
-        const reservations = await Reservation.find({
-          user: customer._id,
-        }).sort({
-          createdAt: -1,
-        });
-
-        return {
-          _id: customer._id,
-
-          name: customer.name,
-
-          phone: customer.phone,
-
-          email: customer.email,
-
-          totalReservations: reservations.length,
-
-          lastVisit: reservations.length
-            ? reservations[0].reservationDate
-            : null,
-        };
-      }),
-    );
+    const customers = await User.aggregate([
+      { $match: { role: "user" } },
+      {
+        $lookup: {
+          from: "reservations",
+          let: { userId: "$_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$user", "$$userId"] } } },
+            { $sort: { createdAt: -1 } },
+          ],
+          as: "reservations",
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          phone: 1,
+          email: 1,
+          totalReservations: { $size: "$reservations" },
+          lastVisit: { $arrayElemAt: ["$reservations.reservationDate", 0] },
+        },
+      },
+    ]);
 
     res.json({
       success: true,
 
-      customers: data,
+      customers,
     });
   } catch (error) {
     console.log(error);
