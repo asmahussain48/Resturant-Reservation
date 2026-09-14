@@ -16,7 +16,7 @@ const {
   getCustomerGrowth,
 } = require("../controllers/adminAnalyticsController");
 
-const { requireAuth } = require("../middleware/authMiddleware");
+const { requireAuth, requirePageAuth } = require("../middleware/authMiddleware");
 
 const isAdmin = require("../middleware/isAdmin");
 
@@ -53,7 +53,7 @@ router.get(
 );
 
 
-router.get("/admin/dashboard-page", requireAuth, isAdmin, (req, res) => {
+router.get("/admin/dashboard-page", requirePageAuth, isAdmin, (req, res) => {
   res.render("admin/dashboard");
 });
 module.exports = router;

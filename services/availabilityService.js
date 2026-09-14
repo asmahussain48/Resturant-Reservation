@@ -26,7 +26,6 @@ function generateTimeSlots(openingTime, closingTime, duration) {
 }
 
 async function getAvailableTables(reservationDate, startTime, numberOfPeople) {
-  console.log("getAvailableTables function called");
   const suitableTables = await RestaurantTable.find({
     capacity: {
       $gte: numberOfPeople,
@@ -34,10 +33,6 @@ async function getAvailableTables(reservationDate, startTime, numberOfPeople) {
 
     isActive: true,
   });
-
-  console.log("NUMBER OF PEOPLE:", numberOfPeople);
-
-  console.log("SUITABLE TABLES:", suitableTables);
 
   const reservations = await Reservation.find({
     reservationDate,
@@ -48,13 +43,11 @@ async function getAvailableTables(reservationDate, startTime, numberOfPeople) {
       $in: ["pending", "confirmed"],
     },
   });
-  console.log("RESERVATIONS:", reservations);
 
   const bookedTableIds = reservations.map((reservation) =>
     reservation.table.toString(),
   );
 
-  console.log("BOOKED TABLE IDS:", bookedTableIds);
   const availableTables = suitableTables.filter(
     (table) => !bookedTableIds.includes(table._id.toString()),
   );

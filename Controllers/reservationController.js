@@ -325,8 +325,6 @@
     }
   }
 
-  module.exports.createReservation = createReservation;
-
   module.exports = {
     checkAvailability,
     createReservation,

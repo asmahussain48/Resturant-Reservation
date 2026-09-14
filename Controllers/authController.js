@@ -5,22 +5,6 @@ async function registerUser(req, res) {
   try {
     const { name, email, phone, password } = req.body;
 
-    // Check empty fields
-    if (!name || !email || !phone || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
-
-    // Check password length
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be at least 6 characters",
-      });
-    }
-
     // Check existing user
     const existingUser = await User.findOne({
       email: email.toLowerCase(),
@@ -81,14 +65,6 @@ async function registerUser(req, res) {
 async function loginUser(req, res) {
   try {
     const { email, password } = req.body;
-
-    // Check empty fields
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email and password are required",
-      });
-    }
 
     // Find user
     const user = await User.findOne({

@@ -39,7 +39,7 @@ This README covers setup, running, project structure, environment variables, and
 
 ## Environment variables
 
-Create a `.env` file in the project root (not committed). Required variables:
+Copy `.env.example` to `.env` and fill in real values (never commit `.env`). Required variables:
 
 ```
 MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.example.mongodb.net/restaurant-db
@@ -101,7 +101,7 @@ See [package.json](D:/Express/Resturant-Reservation-main/package.json) for the e
 - `routes/` — route definitions. Notable route files (examples):
   - `frontendRoutes.js` — frontend/end-user pages
   - `authRoutes.js` — sign-in, sign-up, sign-out
-  - `tableRoutes.js`, `reservationRoutes.js`, `menuRoutes.js`, `settingsRoutes.js`
+  - `reservationRoutes.js`, `menuRoutes.js`, `settingsRoutes.js`
   - `admin*` routes — admin area (reservations, tables, settings, menu, customers, analytics)
 - `models/` — Mongoose models (e.g., `RestaurantTable`, reservation and user models)
 - `views/` — EJS templates
@@ -127,15 +127,13 @@ This project defines many routes. A non-exhaustive list (inspect `routes/` for f
 - Frontend pages and public endpoints: handled by `routes/frontendRoutes.js`
 - Authentication: `routes/authRoutes.js`
 - Reservations: `routes/reservationRoutes.js` and `routes/adminReservationRoutes.js`
-- Tables: `routes/tableRoutes.js` and `routes/adminTableRoutes.js`
+- Tables (admin-only): `routes/adminTableRoutes.js`
 - Menu: `routes/menuRoutes.js` and `routes/adminMenuRoutes.js`
 - Admin settings & analytics: `routes/settingsRoutes.js`, `routes/adminSettingRoutes.js`, `routes/adminAnalyticsRoutes.js`
 
-There are also example/test endpoints included in `app.js` such as:
+There is also one example endpoint included in `app.js`:
 
-- `/session-test` — simple session visit counter
 - `/api/profile` — authenticated profile endpoint (uses `requireAuth` middleware)
-- `/check-tables` — temporary endpoint to fetch tables (remove or secure in production)
 
 ---
 
@@ -144,8 +142,8 @@ There are also example/test endpoints included in `app.js` such as:
 - Use HTTPS in production and set `NODE_ENV=production`.
 - Ensure `SESSION_SECRET` is strong and stored securely (environment manager / secrets manager).
 - Secure MongoDB credentials (use least-privilege DB user and IP/network restrictions).
-- Remove or protect any temporary or debugging routes (e.g., `/check-tables`) before public deployment.
-- Configure rate limiting and helmet (helmet is already included as a dependency) and follow OWASP recommendations.
+- `helmet` is applied globally and `express-rate-limit` throttles `/login` and `/register` (see `app.js`). Tune the limiter thresholds for your traffic before going live.
+- If this repo's git history ever contained a real `.env` (check with `git log --all -- .env`), treat those credentials as compromised: rotate them and scrub the file from history (e.g. with `git filter-repo` or the BFG Repo-Cleaner) before making the repository public.
 
 ---
 
