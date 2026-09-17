@@ -8,12 +8,12 @@ const {
   updateRestaurantStatus,
 } = require("../controllers/adminSettingController");
 
-const { requireAuth } = require("../middleware/authMiddleware");
+const { requireAuth, requirePageAuth } = require("../middleware/authMiddleware");
 
 const isAdmin = require("../middleware/isAdmin");
 
 // PAGE ROUTE
-router.get("/admin/settings", requireAuth, isAdmin, (req, res) => {
+router.get("/admin/settings", requirePageAuth, isAdmin, (req, res) => {
   res.render("admin/settings");
 });
 

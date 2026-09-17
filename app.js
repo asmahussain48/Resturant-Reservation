@@ -1,5 +1,7 @@
 const express = require("express");
 const path = require("path");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 const app = express();
 
@@ -14,6 +16,14 @@ app.set("views", path.join(__dirname, "views"));
 // ======================
 // Middlewares
 // ======================
+
+app.use(
+  helmet({
+    // Tailwind is loaded from a CDN and the reservation/menu pages use inline
+    // <script> blocks, so a strict default CSP would break the app.
+    contentSecurityPolicy: false,
+  }),
+);
 
 app.use(express.json());
 
@@ -36,8 +46,6 @@ const frontendRoutes = require("./routes/frontendRoutes");
 const pageRoutes = require("./routes/pageRoutes");
 
 const authRoutes = require("./routes/authRoutes");
-
-const tableRoutes = require("./routes/tableRoutes");
 
 const reservationRoutes = require("./routes/reservationRoutes");
 
@@ -70,26 +78,9 @@ app.use((req, res, next) => {
 
   next();
 });
-// ======================
-// Temporary Session Test
-// ======================
-
-app.get("/session-test", (req, res) => {
-  if (!req.session.visitCount) {
-    req.session.visitCount = 1;
-  } else {
-    req.session.visitCount++;
-  }
-
-  res.json({
-    success: true,
-
-    visitCount: req.session.visitCount,
-  });
-});
 
 // ======================
-// Profile API Test
+// Profile API
 // ======================
 
 const { requireAuth } = require("./middleware/authMiddleware");
@@ -103,28 +94,18 @@ app.get("/api/profile", requireAuth, (req, res) => {
 });
 
 // ======================
-// Temporary Check Tables
-// Remove after testing
+// Rate Limiting (auth endpoints)
 // ======================
 
-const RestaurantTable = require("./models/RestaurantTable");
-
-app.get("/check-tables", async (req, res) => {
-  try {
-    const tables = await RestaurantTable.find();
-
-    res.json({
-      success: true,
-
-      tables,
-    });
-  } catch (error) {
-    res.json({
-      success: false,
-
-      message: error.message,
-    });
-  }
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many attempts. Please try again later.",
+  },
 });
 
 // ======================
@@ -135,9 +116,9 @@ app.use("/", pageRoutes);
 
 app.use("/", frontendRoutes);
 
+app.use("/register", authLimiter);
+app.use("/login", authLimiter);
 app.use("/", authRoutes);
-
-app.use("/", tableRoutes);
 
 app.use("/", reservationRoutes);
 
@@ -158,6 +139,17 @@ app.use("/", adminMenuRoutes);
 app.use("/", adminCustomerRoutes);
 
 app.use("/", adminAnalyticsRoutes);
+
+// ======================
+// 404 + Error Handling
+// ======================
+
+const notFound = require("./middleware/notFoundMiddleware");
+const errorHandler = require("./middleware/errorMiddleware");
+
+app.use(notFound);
+app.use(errorHandler);
+
 // ======================
 // Export
 // ======================

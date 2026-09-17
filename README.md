@@ -39,7 +39,7 @@ This README covers setup, running, project structure, environment variables, and
 
 ## Environment variables
 
-Create a `.env` file in the project root (not committed). Required variables:
+Copy `.env.example` to `.env` and fill in real values (never commit `.env`). Required variables:
 
 ```
 MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.example.mongodb.net/restaurant-db
@@ -101,11 +101,13 @@ See [package.json](D:/Express/Resturant-Reservation-main/package.json) for the e
 - `routes/` — route definitions. Notable route files (examples):
   - `frontendRoutes.js` — frontend/end-user pages
   - `authRoutes.js` — sign-in, sign-up, sign-out
-  - `tableRoutes.js`, `reservationRoutes.js`, `menuRoutes.js`, `settingsRoutes.js`
+  - `reservationRoutes.js`, `menuRoutes.js`, `settingsRoutes.js`
   - `admin*` routes — admin area (reservations, tables, settings, menu, customers, analytics)
+- `controllers/` — request handlers (note: lowercase directory name — required on Vercel/Linux, which is case-sensitive, unlike Windows)
 - `models/` — Mongoose models (e.g., `RestaurantTable`, reservation and user models)
 - `views/` — EJS templates
 - `public/` — static assets (CSS, JS, images)
+- `api/index.js` — serverless entrypoint used only on Vercel (see below); local dev still uses `server.js`
 
 Refer to the code to inspect specific route and model details: [app.js](D:/Express/Resturant-Reservation-main/app.js)
 
@@ -127,15 +129,13 @@ This project defines many routes. A non-exhaustive list (inspect `routes/` for f
 - Frontend pages and public endpoints: handled by `routes/frontendRoutes.js`
 - Authentication: `routes/authRoutes.js`
 - Reservations: `routes/reservationRoutes.js` and `routes/adminReservationRoutes.js`
-- Tables: `routes/tableRoutes.js` and `routes/adminTableRoutes.js`
+- Tables (admin-only): `routes/adminTableRoutes.js`
 - Menu: `routes/menuRoutes.js` and `routes/adminMenuRoutes.js`
 - Admin settings & analytics: `routes/settingsRoutes.js`, `routes/adminSettingRoutes.js`, `routes/adminAnalyticsRoutes.js`
 
-There are also example/test endpoints included in `app.js` such as:
+There is also one example endpoint included in `app.js`:
 
-- `/session-test` — simple session visit counter
 - `/api/profile` — authenticated profile endpoint (uses `requireAuth` middleware)
-- `/check-tables` — temporary endpoint to fetch tables (remove or secure in production)
 
 ---
 
@@ -144,8 +144,24 @@ There are also example/test endpoints included in `app.js` such as:
 - Use HTTPS in production and set `NODE_ENV=production`.
 - Ensure `SESSION_SECRET` is strong and stored securely (environment manager / secrets manager).
 - Secure MongoDB credentials (use least-privilege DB user and IP/network restrictions).
-- Remove or protect any temporary or debugging routes (e.g., `/check-tables`) before public deployment.
-- Configure rate limiting and helmet (helmet is already included as a dependency) and follow OWASP recommendations.
+- `helmet` is applied globally and `express-rate-limit` throttles `/login` and `/register` (see `app.js`).
+- If this repo's git history ever contained a real `.env` (check with `git log --all -- .env`), treat those credentials as compromised: rotate them and scrub the file from history (e.g. with `git filter-repo` or the BFG Repo-Cleaner) before making the repository public.
+
+---
+
+## Deploying to Vercel
+
+This app runs as a single serverless function on Vercel. `api/index.js` wraps the Express app and reuses a cached MongoDB connection across invocations; `vercel.json` routes every request to it and bundles `views/` and `public/` into the function (EJS templates and static assets are read from disk at request time, not `require`d, so Vercel's automatic file-tracing won't include them without this).
+
+1. Push this repo to GitHub.
+2. In Vercel: **New Project** → import the repo → Framework Preset: **Other**.
+3. Add environment variables (Project Settings → Environment Variables): `MONGODB_URI`, `SESSION_SECRET`, `NODE_ENV=production`. Don't set `PORT` — Vercel doesn't use it.
+4. In MongoDB Atlas → Network Access, allow `0.0.0.0/0` (Vercel's serverless IPs aren't fixed).
+5. Deploy. Every subsequent push to the connected branch redeploys automatically.
+
+Notes:
+- Sessions are stored in MongoDB (`connect-mongo`), not in server memory, so they work correctly across the stateless serverless functions.
+- Local development (`npm run dev` / `npm start`) is unaffected — it still uses `server.js` and `app.listen()`. `api/index.js` is only invoked by Vercel.
 
 ---
 

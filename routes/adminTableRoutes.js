@@ -9,13 +9,13 @@ const {
   updateTableStatus,
 } = require("../controllers/adminTableController");
 
-const { requireAuth } = require("../middleware/authMiddleware");
+const { requireAuth, requirePageAuth } = require("../middleware/authMiddleware");
 
 const isAdmin = require("../middleware/isAdmin");
 
 // PAGE ROUTE
 
-router.get("/admin/tables", requireAuth, isAdmin, (req, res) => {
+router.get("/admin/tables", requirePageAuth, isAdmin, (req, res) => {
   res.render("admin/tables");
 });
 
