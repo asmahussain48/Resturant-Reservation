@@ -144,7 +144,7 @@ There is also one example endpoint included in `app.js`:
 - Use HTTPS in production and set `NODE_ENV=production`.
 - Ensure `SESSION_SECRET` is strong and stored securely (environment manager / secrets manager).
 - Secure MongoDB credentials (use least-privilege DB user and IP/network restrictions).
-- `helmet` is applied globally and `express-rate-limit` throttles `/login` and `/register` (see `app.js`).
+- `helmet` is applied globally and `express-rate-limit` throttles `/login` and `/register` (see `app.js`). Tune the limiter thresholds for your traffic before going live.
 - If this repo's git history ever contained a real `.env` (check with `git log --all -- .env`), treat those credentials as compromised: rotate them and scrub the file from history (e.g. with `git filter-repo` or the BFG Repo-Cleaner) before making the repository public.
 
 ---
