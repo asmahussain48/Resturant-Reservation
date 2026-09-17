@@ -18,3 +18,14 @@ module.exports = async (req, res) => {
 
   app(req, res);
 };
+
+// Vercel's Node.js runtime parses JSON/form bodies itself by default, which
+// consumes the request stream before Express's own express.json()/
+// express.urlencoded() middleware gets a chance to read it - leaving
+// req.body empty on every POST/PUT/PATCH. Disable Vercel's parsing so
+// Express handles the body exactly like it does locally.
+module.exports.config = {
+  api: {
+    bodyParser: false,
+  },
+};
