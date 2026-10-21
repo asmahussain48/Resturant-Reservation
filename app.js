@@ -5,6 +5,12 @@ const rateLimit = require("express-rate-limit");
 
 const app = express();
 
+// Vercel terminates HTTPS at its edge and forwards plain HTTP to the function
+// with an X-Forwarded-Proto header. Trust that proxy hop so req.secure is true;
+// otherwise express-session refuses to send the `secure` session cookie in
+// production and users are bounced back to /login after logging in.
+app.set("trust proxy", 1);
+
 // ======================
 // EJS Setup
 // ======================
